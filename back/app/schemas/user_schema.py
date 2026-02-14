@@ -25,3 +25,10 @@ class UserCreateSchema(BaseModel):
 
         return value
 
+#Clase para validar el login,solo necesita email y contraseña para ello
+class UserLoginSchema(BaseModel):
+    #Correo
+    email: EmailStr
+    
+    #Contraseña
+    password: str

@@ -1,5 +1,5 @@
 from app.extensions import db
-
+from datetime import datetime
 #Creamos la clase que define la tabla
 class Technician(db.Model):
 
@@ -46,7 +46,7 @@ class Technician(db.Model):
     is_active = db.Column(db.Boolean, default=True)
 
     #Columna que registra el tiempo de creacion
-    created_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime,default=datetime.utcnow,nullable=False)
 
     #Creamos un metodo que retorna un diccionario con la información asiciada al tecnico
     def to_dict(self):
