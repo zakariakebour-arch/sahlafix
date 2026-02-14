@@ -1,78 +1,45 @@
-#Importamos para hashear contraseñas
-from werkzeug.security import generate_password_hash, check_password_hash
-#Importamos db desde extensions
+#Importamos schema de categorias
+from app.schemas.category_schema import CategoryCreateSchema
+#Importamos el modelo
+from app.models.category import Category
+#Importamos la base de datos
 from app.extensions import db
+#Importamos validador de error de pydantic
 from pydantic import ValidationError
-from app.models.user import User
-#Importamos validador
-from app.schemas.user_schema import UserCreateSchema,UserLoginSchema
 
-class UserRegister:
-  @staticmethod #Metodo estatico
-  def create_user(data: dict):#Le entra parametro como diccionario
-    #Hacemos un try para validar con pydantic
-    try:
-      validate_data = UserCreateSchema(**data)
-    except ValidationError as e:#Excepcion si da error cuando los datos son incorrectos(validados con schema)
-      return {"error":"Datos inválidos",
-               "details":e.errors() #Detalle del error
-             },400
+#Creamos la clase de sevicio de categorias
+class CategoriesService:
+    #Metodo estatico para recibir la categoria del tecnico segun el id
+    @staticmethod
+    def get_category(category_id: int):
+        #Hacemos consulta que busca la categoria del tecnico segun el identificador
+        Category.query.filter_by(id=category_id).first()
 
-    #Variable que comprueba si ya exsiste el usuario
-    existing_user = User.query.filter_by(email=validate_data.email).first()
+    #Metodo estatico para que devuelva todas las categorias en una lista
+    @staticmethod
+    def get_categories():
+        categories = Category.query.all()
+        #Filtramos
+        return [c.to_dict() for c in categories]
     
-    #Si ya exsiste el usuario entonces reotrnamos un mensaje
-    if existing_user:
-      return {"error":"Usuario ya registrado"},409
+    #Metodo estatico para crear nueva categoria
+    @staticmethod
+    def create(data: dict):
+        try:
+            #Como primero validamos el diccionario con schema de categorias
+            validate_data = CategoryCreateSchema(**data)
+        except ValidationError as e:
+           return {"error":"Datos incorrectos",
+                "details":e.errors()
+                },400
     
-    #Cremos la contraseña
-    password_hash = generate_password_hash(validate_data.password)
-    new_user = User(
-      email=validate_data.email,
-      password=password_hash,
-      role=validate_data.role
-    )
+    #Metodo estatico para actualizar categoria
+    @staticmethod
+    def update(category_id: int, data: dict):#Nos entra la nueva actualizacion y el identificador de la categoria como parametro
+        pass
 
-    #Hacemos un try para conexion con la base de datos por si falla
-    try:
-        #Despues de la creacion guardamos resultado en la base de datos
-        db.session.add(new_user)
-        db.session.commit()
-    except Exception:
-        db.session.rollback()
-        return {"error":"Error interno del servidor"},500
-
-    #Retornamos un mensaje de existo
-    return {
-      "message":"Usuario creado correctamente",
-      "user":{
-        "id":new_user.id,
-        "email":new_user.email,
-        "role":new_user.role
-      }
-    },201
-
-  @staticmethod #Metodo estatico
-  def login(data: dict): #Le entra parametro como diccionario
-    #Validamos data antes de comprobar si exsiste el usuario
-    try:
-      validate_data = UserLoginSchema(**data)
-    except ValidationError as e:
-      return {
-        "error":"datos inválidos",
-        "details":e.errors()
-      },400
+    #Metodo estatico para eliminar categorias
+    @staticmethod
+    def delete(category_id: int):
+        pass
     
-    #Hacemos consulta de todos los correos de usuarios o clientes disponibles
-    user = User.query.filter_by(email=validate_data.email).first()
-
-    #Comprobamos correo del usuario con lo que ingreso de correo actualmente y si la contraseña coincide
-    if not user or not not check_password_hash(user.password,validate_data.password):
-      return {
-        "error":"Credenciales incorrectas"
-      },401
-    
-    #Mensaje de exsito 
-    return {
-      "message":"exito"
-    },200
