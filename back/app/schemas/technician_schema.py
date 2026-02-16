@@ -1,6 +1,7 @@
 from pydantic import BaseModel, field_validator
 from typing import Optional
-
+#Importamos validador profesional de numeros de telefono
+import phonenumbers
 class TechnicianCreateSchema(BaseModel):
     #Nombre completo como string
     full_name: str
@@ -20,6 +21,9 @@ class TechnicianCreateSchema(BaseModel):
     #Activo tipo boleano y por defecto es True(osea activo)
     is_active: bool = True
 
+    #Numero telefono
+    phone: int
+
     #Validador de nombre
     @field_validator("full_name")
     @classmethod
@@ -28,6 +32,7 @@ class TechnicianCreateSchema(BaseModel):
             raise ValueError("El nombre completo debe tener al menos 3 caracteres.")
         return value
 
+    #Validador de categoria id
     @field_validator("category_id")
     @classmethod
     def validate_category_id(cls, value: int):
@@ -35,6 +40,7 @@ class TechnicianCreateSchema(BaseModel):
             raise ValueError("category_id debe ser un entero válido.")
         return value
 
+    #Validador de valor wilaya
     @field_validator("wilaya")
     @classmethod
     def validate_wilaya(cls, value: str):
@@ -58,3 +64,35 @@ class TechnicianCreateSchema(BaseModel):
             raise ValueError("La descripción no puede superar los 500 caracteres.")
         return value
 
+    #Validador de numero de telefono
+    
+    phone: str = Field(..., description="Número de teléfono en formato internacional o nacional")
+
+    @validator("phone")
+    def validate_and_normalize_phone(cls, v: str) -> str:
+        raw = (v or "").strip()
+        if not raw:
+            raise ValueError("El teléfono es obligatorio")
+
+        candidate_regions = ["DZ", "ES"]  # Asignamos de momento origenes españa y argelia
+
+        # Si ya viene con '+', probar internacional directo
+        if raw.startswith("+"):
+            try:
+                num = phonenumbers.parse(raw, None)
+                if phonenumbers.is_valid_number(num):
+                    return phonenumbers.format_number(num, phonenumbers.PhoneNumberFormat.E164)
+            except Exception:
+                pass  # seguiremos probando abajo
+
+        # Probar por regiones conocidas
+        for region in candidate_regions:
+            try:
+                num = phonenumbers.parse(raw, region)
+                if phonenumbers.is_valid_number(num):
+                    return phonenumbers.format_number(num, phonenumbers.PhoneNumberFormat.E164)
+            except Exception:
+                continue
+
+        # Mensaje final si no es válido
+        raise ValueError("Número de teléfono inválido. Usa formato internacional (+34..., +213...) o un número local válido.")

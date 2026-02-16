@@ -67,7 +67,7 @@ class UserRegister:
     user = User.query.filter_by(email=validate_data.email).first()
 
     #Comprobamos correo del usuario con lo que ingreso de correo actualmente y si la contraseña coincide
-    if not user or not not check_password_hash(user.password,validate_data.password):
+    if not user or not check_password_hash(user.password,validate_data.password):
       return {
         "error":"Credenciales incorrectas"
       },401
