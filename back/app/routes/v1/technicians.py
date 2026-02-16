@@ -7,7 +7,7 @@ from app.models.technician import Technician
 technicians_bp = Blueprint("technicians_v1",__name__,url_prefix="/api/v1/technicians")
 
 #Endpoint que lista todos los tecnicos disponibles
-@technicians_bp.route("",methods=["GET"])
+@technicians_bp.route("/",methods=["GET"])
 def get_technicians():
     #Variable con el metodo de servicio
     data,status = TechnicianService.get_technicians()
