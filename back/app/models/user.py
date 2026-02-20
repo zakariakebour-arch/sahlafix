@@ -13,7 +13,7 @@ class User(db.Model):
     # Contraseña hasheada
     password_hash = db.Column(db.String(255), nullable=False)
 
-    # Rol del usuario (CLIENT, TECH, ADMIN)
+    # Rol del usuario 
     role = db.Column(db.String(50), nullable=False)
 
     # Teléfono opcional

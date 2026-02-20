@@ -9,7 +9,10 @@ technicians_bp = Blueprint("technicians_v1",__name__,url_prefix="/api/v1/technic
 technicians = ["hola","mundo"]
 #Endpoint que lista todos los tecnicos disponibles
 @technicians_bp.route("/",methods=["GET"])
+<<<<<<< HEAD
 @jwt_required
+=======
+>>>>>>> 63a0773514f639c3bf37dac5da57c9df87b920ae
 def get_technicians():
     #Variable con el metodo de servicio
     data,status = TechnicianService.get_technicians()
@@ -51,5 +54,9 @@ def get_photo_profile():
     
     return jsonify({"message":"Archivo recibido"}),200
 
+<<<<<<< HEAD
 
    
+=======
+ 
+>>>>>>> 63a0773514f639c3bf37dac5da57c9df87b920ae
