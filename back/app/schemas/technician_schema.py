@@ -2,6 +2,7 @@ from pydantic import BaseModel, field_validator
 from typing import Optional
 #Importamos validador profesional de numeros de telefono
 import phonenumbers
+
 class TechnicianCreateSchema(BaseModel):
     #Nombre completo como string
     full_name: str
@@ -64,11 +65,8 @@ class TechnicianCreateSchema(BaseModel):
             raise ValueError("La descripción no puede superar los 500 caracteres.")
         return value
 
-    #Validador de numero de telefono
-    
-    phone: str = Field(..., description="Número de teléfono en formato internacional o nacional")
-
-    @validator("phone")
+    #Validamos por completo y de manera profesional con la libreria phonenumbers
+    @field_validator("phone")
     def validate_and_normalize_phone(cls, v: str) -> str:
         raw = (v or "").strip()
         if not raw:

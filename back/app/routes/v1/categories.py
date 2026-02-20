@@ -1,6 +1,8 @@
 from flask import Blueprint,request,jsonify
 #Importamos la logica de negocio de categoria
 from app.services.categories_service import CategoriesService
+#Importamos decorador para rutas de admin
+from app.utils.helpers import jwt_required,roles_required
 
 category_bp = Blueprint("categories_v1",__name__,url_prefix="/api/v1/categories")
 
@@ -24,6 +26,8 @@ def get_category(id):
 
 #Ruta para crear nueva categoria
 @category_bp.route("/",methods=["POST"])
+@jwt_required
+@roles_required("admin")#Aqui despues de JWT correcto comprobamos si el rol es administrador
 def create_category():
     #Creamos variable que contiene el metodo y el parametro json que recibe para la creacion
     data,status = CategoriesService.create(request.json)
@@ -33,6 +37,8 @@ def create_category():
 
 #Creamos ruta para eliminar categoria
 @category_bp.route("/<int:id>",methods=["DELETE"])
+@jwt_required
+@roles_required("admin")
 def delete_category(id):
     #Creamos variable con metodo y codigo estado importado de servicios
     data,status = CategoriesService.delete(id)
@@ -42,6 +48,8 @@ def delete_category(id):
 
 #Ruta para actualizar la categoria
 @category_bp.route("/<int:id>",methods=["PUT"])
+@jwt_required
+@roles_required("admin")
 def update_category(id):
     #Creamos una variable del metodo importado con codigo de estado
     data,status = CategoriesService.update(id,request.json)

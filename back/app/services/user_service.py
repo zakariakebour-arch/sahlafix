@@ -6,6 +6,9 @@ from pydantic import ValidationError
 from app.models.user import User
 #Importamos validador
 from app.schemas.user_schema import UserCreateSchema,UserLoginSchema
+#Importamos JWT
+from app.utils.security import generate_token
+from typing import Optional
 
 class UserRegister:
   @staticmethod #Metodo estatico
@@ -42,9 +45,13 @@ class UserRegister:
         db.session.rollback()
         return {"error":"Error interno del servidor"},500
 
+    #Generamos toker
+    token = generate_token(new_user)
+
     #Retornamos un mensaje de existo
     return {
       "message":"Usuario creado correctamente",
+      "token": token,
       "user":{
         "id":new_user.id,
         "email":new_user.email,
@@ -63,8 +70,11 @@ class UserRegister:
         "details":e.errors()
       },400
     
+    #Normalizamos antes el correo
+    email = validate_data.email.strip().lower()
+
     #Hacemos consulta de todos los correos de usuarios o clientes disponibles
-    user = User.query.filter_by(email=validate_data.email).first()
+    user = User.query.filter_by(email=email).first()
 
     #Comprobamos correo del usuario con lo que ingreso de correo actualmente y si la contraseña coincide
     if not user or not check_password_hash(user.password,validate_data.password):
@@ -72,7 +82,17 @@ class UserRegister:
         "error":"Credenciales incorrectas"
       },401
     
+    #Variable que genera el token para el usuario
+    token = generate_token(user)
+
     #Mensaje de exsito 
     return {
-      "message":"exito"
+      "message":"exito",
+      #Retornamos token
+      "token": token,
+      "user":{
+        "id":user.id,
+        "email":user.email,
+        "role":user.role
+      }
     },200
