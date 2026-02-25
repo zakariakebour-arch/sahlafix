@@ -6,13 +6,8 @@ from app.utils.helpers import jwt_required,roles_required
 
 technicians_bp = Blueprint("technicians_v1",__name__,url_prefix="/api/v1/technicians")
 
-technicians = ["hola","mundo"]
 #Endpoint que lista todos los tecnicos disponibles
 @technicians_bp.route("/",methods=["GET"])
-<<<<<<< HEAD
-@jwt_required
-=======
->>>>>>> 63a0773514f639c3bf37dac5da57c9df87b920ae
 def get_technicians():
     #Variable con el metodo de servicio
     data,status = TechnicianService.get_technicians()
@@ -22,7 +17,6 @@ def get_technicians():
 
 #Endpoint recibe segun el id seleccionado del tecnico
 @technicians_bp.route("/<int:id>",methods=["GET"])
-@jwt_required
 def get_technician(id):
     #Creamos variable que contiene el metodo y el estado 
     data,status = TechnicianService.get_by_id(id)
@@ -53,10 +47,3 @@ def get_photo_profile():
         return jsonify({"error":"Archivo requerido"}),400
     
     return jsonify({"message":"Archivo recibido"}),200
-
-<<<<<<< HEAD
-
-   
-=======
- 
->>>>>>> 63a0773514f639c3bf37dac5da57c9df87b920ae

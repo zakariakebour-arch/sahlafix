@@ -5,6 +5,7 @@ from app.utils.security import decode_token
 from app.models.user import User
 from app.extensions import db  # si usas session.get en SQLAlchemy 2.x
 from app.models.user import User
+
 def jwt_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
