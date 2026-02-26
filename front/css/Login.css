@@ -1,0 +1,122 @@
+
+:root{
+  --bg: #ffffff;
+  --card: #ffffff;
+
+  --text: #0F3C4C;
+  --muted: #3E6B76;
+
+  --line: #D7E2E3;
+  --ring: #2BA5A5;
+
+  --accent: #2BA5A5;
+  --accent-press: #218686;
+
+  --danger: #E03A49;
+
+  --radius: 14px;
+  --tap: 45px;
+  --gap: 16px;
+  --speed: .22s;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.login-app{
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+.login-card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 34px 28px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-title{
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  text-align: center;
+  color: var(--text);
+}
+
+.login-subtitle{
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+  margin: 0 0 22px 0;
+}
+.login-field{
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.login-label{
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+input{
+  height: var(--tap);
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+  font-size: 15px;
+  transition: border-color var(--speed), outline-color var(--speed);
+}
+
+input::placeholder{
+  color: #9FA4A6;
+}
+
+input:focus{
+  border-color: var(--ring);
+  outline: 2px solid rgba(43,165,165,0.25);
+}
+.login-btn{
+  width: 100%;
+  height: var(--tap);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  margin-top: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background var(--speed);
+}
+
+.login-btn:active{
+  background: var(--accent-press);
+}
+@media (min-width: 480px){
+  .login-card{
+    padding: 40px 34px;
+  }
+}
+
+@media (min-width: 1024px){
+  .login-title{ font-size: 26px; }
+}

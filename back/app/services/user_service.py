@@ -17,8 +17,9 @@ class UserRegister:
     try:
       validate_data = UserCreateSchema(**data)
     except ValidationError as e:#Excepcion si da error cuando los datos son incorrectos(validados con schema)
+      print(e.errors())
       return {"error":"Datos inválidos",
-               "details":e.errors() #Detalle del error
+               "details":str(e) #Detalle del error
              },400
 
     #Variable que comprueba si ya exsiste el usuario
@@ -67,7 +68,7 @@ class UserRegister:
     except ValidationError as e:
       return {
         "error":"datos inválidos",
-        "details":e.errors()
+        "details":str(e)
       },400
     
     #Normalizamos antes el correo

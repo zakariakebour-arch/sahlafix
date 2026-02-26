@@ -1,0 +1,313 @@
+/*Quitamos padding y margin por defecto de navegadores*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+body{
+     font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+               'Open Sans', sans-serif;
+}
+/*Edicion de el header,nav y la lista*/
+header{
+    height: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+nav{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+ul{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ul li{
+    list-style: none;
+    margin: 40px;
+}
+ul li a{
+    text-decoration: none;
+    color: black;
+}
+/*Edicion del menu en el nav*/
+#menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+/*Edicion de la imagen de logo*/
+#logo_sahlafix{
+    width: 200px;
+    height: 200px;
+}
+/*Imagenes de categorias*/
+#imagenes-categorias{
+    width: 100%;
+    height: 700px;
+}
+#categorias{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+}
+/*Contenedor de las imagenes*/
+.categorias{
+    width: 100%;
+    height: 100%;
+}
+/* edicion del Carrusel*/
+#imagenes-categorias {
+    overflow: hidden;
+}
+#categorias {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+}
+.categorias {
+    min-width: 100%;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+/* Ajustar altura del header */
+header {
+    height: auto;
+    padding: 20px 0;
+}
+
+/* Reducir tamaño del menú */
+#menu {
+    padding: 10px 0;
+}
+/* Ajustar separación vertical del nav */
+nav {
+    margin-top: 10px; 
+}
+
+/* Ajustar la lista para que ocupe menos espacio */
+ul {
+    gap: 15px; 
+}
+
+#servicios-fotos img{
+    width: 300px !important;
+    height: 650px !important;
+    object-fit: cover;
+}
+
+/* CONTENEDOR */
+#servicios-fotos{
+    position: relative;
+    height: 900px;
+    margin-top: 80px;
+}
+
+/* ESTILO BASE IMÁGENES */
+#servicios-fotos img{
+    position: absolute;
+    width: 220px;
+    height: 450px;
+    object-fit: cover;
+    border-radius: 18px;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: all 0.9s ease;
+}
+
+/* POSICIONES */
+#servicios-fotos img:nth-child(1){
+    top: 0;
+    left: 5%;
+}
+
+#servicios-fotos img:nth-child(2){
+    top: 200px;
+    right: 5%;
+}
+
+#servicios-fotos img:nth-child(3){
+    top: 420px;
+    left: 50%;
+    transform: translate(-50%, 60px);
+}
+
+/* CLASE CUANDO APARECEN */
+#servicios-fotos img.visible{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#servicios-fotos img:nth-child(3).visible{
+    transform: translate(-50%, 0);
+}
+
+/* ===== TITULO SECCION SERVICIOS ===== */
+#Servicios h3{
+    max-width: 900px;
+    margin: 120px auto 40px auto;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #0f3a5a;
+    letter-spacing: -0.5px;
+    background-color: aquamarine;
+    border-radius: 30px;
+    padding: 30px;
+}
+
+#Servicios{
+    padding-bottom: 260px; /* espacio real debajo para evitar solapamiento */
+}
+
+/* ===== SECCION FUNCIONAMIENTO SPLIT ===== */
+#Funcionamiento{
+    width: 100%;
+    padding: 120px 40px;
+    background: linear-gradient(180deg, #f4f8fb, #e8f1f6);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+/* CONTENEDOR IZQUIERDA: CARDS */
+.func-steps{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    flex: 1;
+    min-width: 280px;
+}
+
+/* CARDS ESTILO */
+.step{
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid black;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.7s ease;
+    max-width: 850px;
+}
+.step span{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    background: #0f3a5a;
+    color: white;
+    font-weight: 600;
+}
+
+/* TITULO PASO */
+.step h4{
+    font-size: 1.1rem;
+    color: #0f3a5a;
+    margin-bottom: 8px;
+}
+
+/* TEXTO */
+.step p{
+    font-size: 0.95rem;
+    color: #5a768a;
+}
+
+/* CLASE CUANDO APARECE */
+.step.visible{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.func-video{
+    flex: 1;
+    min-width: 700px; 
+    max-width: 900px; 
+    height: 700px; 
+}
+
+.func-video video{
+    width: 100%;
+    height: 100%;  
+    object-fit: cover; 
+    border-radius: 20px;
+}
+
+/* TITULO Y SUBTITULO CENTRALIZADOS */
+#Funcionamiento h2{
+    width: 100%;
+    font-size: 2.3rem;
+    font-weight: 600;
+    color: #0f3a5a;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.func-subtitle{
+    width: 100%;
+    color: #4a6a80;
+    text-align: center;
+    margin-bottom: 60px;
+    font-size: 1.1rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px){
+    #Funcionamiento{
+        flex-direction: column;
+        align-items: center;
+    }
+    .func-video{
+        margin-top: 40px;
+        max-width: 100%;
+    }
+}
+#site-footer{
+    width: 100%;
+    background-color: #0f3a5a; /* azul del logo */
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+}
+
+#site-footer .footer-wrap{
+    text-align: center;
+}
+
+#site-footer img{
+    width: 150px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+#site-footer .footer-legal{
+    font-size: 0.95rem;
+    color: #cce0f0;
+}
+#footer-imagen{
+    width: 300px !important;
+    height: 300px !important;
+}

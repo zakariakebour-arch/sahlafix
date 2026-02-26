@@ -7,6 +7,7 @@ auth_bp = Blueprint("auth_v1",__name__,url_prefix="/api/v1/auth")
 @auth_bp.route("/register",methods=["POST"])
 #Creamos la funcion de la ruta
 def register():
+    print("Peticion recibida")
     #creamos variable que contiene el metodo de crear usuario
     data,status = UserRegister.create_user(request.json)
 

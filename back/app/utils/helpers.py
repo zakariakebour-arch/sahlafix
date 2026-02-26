@@ -3,7 +3,7 @@ from functools import wraps
 from flask import request, jsonify, g
 from app.utils.security import decode_token
 from app.models.user import User
-from app.extensions import db  # si usas session.get en SQLAlchemy 2.x
+from app.extensions import db  
 from app.models.user import User
 
 def jwt_required(f):
@@ -29,11 +29,7 @@ def jwt_required(f):
         if not payload:
             return jsonify({"error": "Token inválido o expirado"}), 401
 
-        # --- IMPORTANTE: alinear el claim con tu generate_token ---
-        # Si en el token guardaste el id como 'sub' (recomendado por RFC7519):
         user_id = payload.get("user_id")
-        # Si prefieres 'user_id', usa esta línea en su lugar:
-        # user_id = payload.get("user_id")
 
         if not user_id:
             return jsonify({"error": "Token sin subject"}), 401
