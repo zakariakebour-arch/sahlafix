@@ -17,6 +17,7 @@ def get_technicians():
 
 #Endpoint recibe segun el id seleccionado del tecnico
 @technicians_bp.route("/<int:id>",methods=["GET"])
+@roles_required("technician")
 def get_technician(id):
     #Creamos variable que contiene el metodo y el estado 
     data,status = TechnicianService.get_by_id(id)
@@ -24,10 +25,10 @@ def get_technician(id):
     #Retornamos los datos del tecnico y codigo de estado    
     return jsonify(data),status
 
-#Ruta para crear nuevo tecnico
+#Ruta para crear nuevo tecnico (solo admin, no se usa en registro)
 @technicians_bp.route("/",methods=["POST"])
 @jwt_required
-@roles_required("technician")#Para cualquier modificacion del tecnico tenemos que comprobar que es rol tecnico
+@roles_required("admin")
 def create_technician():
     #Creamos variable que contiene el metodo de creacion de tecnico con codigo de estado y recibe un diccionario
     data,status = TechnicianService.create_technician(request.json)

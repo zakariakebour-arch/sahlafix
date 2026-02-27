@@ -1,3 +1,4 @@
+categoria_id = document.querySelector("#categorias").value;
 (function() {
   const form = document.getElementById('user-form');
   const roleCliente = document.getElementById('role-cliente');
@@ -18,9 +19,7 @@
 
   let role = 'cliente';
 
-  // ===============================
-  // Funciones de UI
-  // ===============================
+  
   function updateThumb() {
     const index = role === 'cliente' ? 0 : 1;
     thumb.style.translate = `${index * 100}% 0`;
@@ -62,6 +61,7 @@
   }
 
   function clearError(el) { showError(el, ''); }
+
   // Envio al forumulario del formulario
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -87,23 +87,38 @@
     }
     if (!ok) return;
 
-    // Preparar datos
-    const payload = {
-      name: fields.name.value.trim(),
-      email: fields.email.value.trim(),
-      password: fields.password.value,
-      role,
-      tecnico: role === 'tecnico' ? {
+    let payload;
+    let url;
+
+    if (role === 'tecnico') {
+      url = 'http://127.0.0.1:5000/api/v1/auth/register-technician';
+
+      payload = {
+        email: fields.email.value.trim(),
+        password: fields.password.value,
+        role: "technician",
+        full_name: fields.name.value.trim(),
         phone: fields.phone.value.trim(),
         wilaya: fields.wilaya.value.trim(),
         city: fields.city.value.trim(),
-        desc: fields.desc.value.trim(),
-        categorias: fields.categorias.value ? [fields.categorias.value] : []
-      } : null
-    };
+        description: fields.desc.value.trim(),
+        category_id: Number(fields.categorias.value)
+      };
+
+    } else {
+      // payload para crear cliente normal
+      url = 'http://127.0.0.1:5000/api/v1/auth/register';
+
+      payload = {
+        email: fields.email.value.trim(),
+        password: fields.password.value,
+        role: "user",
+        name: fields.name.value.trim()
+      };
+    }
     // Fetch al backend
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/auth/register', {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -112,11 +127,9 @@
       const data = await res.json();
 
       if (res.status === 201) {
-        alert('Usuario creado correctamente');
-        form.reset();
-        setRole('cliente');
+          //Redirigimos a iniciar sesion cuando es correcto
+         window.location.href = "/auth/Login.html";
       } else {
-        alert('Error: ' + (data.error || 'No se pudo crear usuario'));
         console.error(data);
       }
     } catch (err) {

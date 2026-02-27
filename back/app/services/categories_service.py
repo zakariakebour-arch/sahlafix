@@ -39,7 +39,7 @@ class CategoriesService:
             #Creamos la nueva categoria para insertar en la base de datos
             new_category = Category(
                 name=validate_data.name,
-                slug=validate_data.slug
+                slug=validate_data.slug,
             )
 
             #Intentamos insertar si falla lanzamos un mensaje de error
@@ -61,13 +61,12 @@ class CategoriesService:
     
     #Metodo estatico para actualizar categoria
     @staticmethod
-    def update(category_id: int, data: dict):#Nos entra la nueva actualizacion y el identificador de la categoria como parametro
+    def update(category_id: int, data: dict): #Nos entra la nueva actualizacion y el identificador de la categoria como parametro
         #Como primer paso validamos los datos que nos llegan con schema
-        validate_data = CategoryCreateSchema(**data)
-
-        #Si no son correctos
-        if not validate_data:
-            return {"error":"Datos inválidos"},400
+        try:
+            validate_data = CategoryCreateSchema(**data)
+        except ValidationError as e:
+            return {"error":"Datos inválidos", "details": e.errors()}, 400
         
         #Buscamos si exsiste la categoria
         category = Category.query.filter_by(id=category_id).first()
@@ -78,25 +77,17 @@ class CategoriesService:
         
         #Hacemos un try porque si falla la ejecucion falla el sistema
         try:
-            #Buscamos si exsiste la categoria
-            category = Category.query.filter_by(id=category_id).first()
-
             #Datos a actualizar
             category.name = validate_data.name
             category.slug = validate_data.slug
+            category.is_active = validate_data.is_active  # Añadido
             
             #Guardamos cambio
             db.session.commit()
 
             #Retornamos la categoria
             return category.to_dict(), 200
-        #Si los datos son incorrectos
-        except ValidationError as e:
-            return {
-                "error":"Datos incorrectos",
-                "deta":e.errors()
-                    },400
-        #Si falla la conexion
+        
         except Exception:
             db.session.rollback()
             return {"error":"Error interno"},500

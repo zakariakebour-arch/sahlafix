@@ -27,7 +27,7 @@ def get_category(id):
 #Ruta para crear nueva categoria
 @category_bp.route("/",methods=["POST"])
 @jwt_required
-@roles_required("admin")#Aqui despues de JWT correcto comprobamos si el rol es administrador
+@roles_required("admin") #Aqui despues de JWT correcto comprobamos si el rol es administrador
 def create_category():
     #Creamos variable que contiene el metodo y el parametro json que recibe para la creacion
     data,status = CategoriesService.create(request.json)

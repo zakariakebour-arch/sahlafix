@@ -27,11 +27,11 @@ class Category(db.Model):
         data = {
             "id": self.id,
             "name": self.name,
-            "slug": self.slug
+            "slug": self.slug,
         }
 
         #Para poder filtar tecnicos segun categoria,tenemos que tener en cuenta la relacion y para filtrarla comprbamos si ya esta disponible para no entrar en recursion entre categoria y tecnicos
         if include_technicians:
-            data["technicians"] = [t.id for t in self.technicians]#Solo devuelve y filtra id de tecnicos
+            data["technicians"] = [t.id for t in self.technicians] #Solo devuelve y filtra id de tecnicos
 
         return data

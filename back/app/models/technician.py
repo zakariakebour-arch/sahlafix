@@ -1,5 +1,6 @@
 from app.extensions import db
 from datetime import datetime
+
 #Creamos la clase que define la tabla
 class Technician(db.Model):
 
@@ -34,27 +35,26 @@ class Technician(db.Model):
     city = db.Column(db.String(100), nullable=True)
 
     #Descripcion del tecnico
-    description = db.Column(db.String(255),nullable=True)
+    description = db.Column(db.String(255), nullable=True)
 
-    #Columna telefono
-    phone = db.Column(db.Integer,nullable=False)
+    #Columna telefono (CORREGIDO: antes Integer → ahora String)
+    phone = db.Column(db.String(20), nullable=False)
 
     #Columna que solo guarda la foto
-    photo_profile = db.Column(db.String(255),nullable=True)
+    photo_profile = db.Column(db.String(255), nullable=True)
 
-    #Activo o no activo el tenico
+    #Activo o no activo el tecnico
     is_active = db.Column(db.Boolean, default=True)
 
     #Columna que registra el tiempo de creacion
-    created_at = db.Column(db.DateTime,default=datetime.utcnow,nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-    #Creamos un metodo que retorna un diccionario con la información asiciada al tecnico
+    #Creamos un metodo que retorna un diccionario con la información asociada al tecnico
     def to_dict(self):
         return {
-            "id":self.id,
-            "name":self.full_name,
-            "description":self.description,
-            "category_id":self.category_id,
-            "image_url":self.photo_profile
-        } 
-
+            "id": self.id,
+            "name": self.full_name,
+            "description": self.description,
+            "category_id": self.category_id,
+            "image_url": self.photo_profile
+        }

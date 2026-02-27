@@ -238,7 +238,7 @@ textarea:focus{
     font-size: 22px;
   }
 }
-/* ==== SELECT ESTILO INPUT ==== */
+/*Select estilo input*/
 #wilaya ,#categorias{
   height: var(--tap);
   border: 1px solid var(--line);

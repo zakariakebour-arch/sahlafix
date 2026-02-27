@@ -16,7 +16,7 @@ class User(db.Model):
     # Rol del usuario 
     role = db.Column(db.String(50), nullable=False)
 
-    # Teléfono opcional
+    # Teléfono opcional (solo usado si el usuario no es técnico, ya que el técnico tiene su propio teléfono)
     phone = db.Column(db.String(20), nullable=True)
 
     # Fecha de creación

@@ -4,16 +4,16 @@ import re
 class UserCreateSchema(BaseModel):
     email: EmailStr
     password: str
-    role: str | None = "user" #Rol es un string y si no se selecciona que rol es, se asigna user por defecto
+    role: str | None = "user"  # Rol es un string y si no se selecciona que rol es, se asigna user por defecto
 
     # Validador de contraseña
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str):
-        if len(value) < 8:
+        if len(value) < 8:  # corregido <
             raise ValueError("La contraseña debe tener al menos 8 caracteres.")
 
-        #Aqui creamos reglas para la varificacion correcta de contraseña
+        # Aqui creamos reglas para la verificación correcta de contraseña
         if not re.search(r"[A-Z]", value):
             raise ValueError("La contraseña debe contener al menos una letra mayúscula.")
         if not re.search(r"[a-z]", value):
@@ -25,10 +25,21 @@ class UserCreateSchema(BaseModel):
 
         return value
 
-#Clase para validar el login,solo necesita email y contraseña para ello
+    # Validador opcional del rol (recomendado)
+    @field_validator("role")
+    @classmethod
+    def validate_role(cls, value: str):
+        # Si no se pasa nada, el valor por defecto "user" es válido
+        valid_roles = ["user", "technician", "admin"]
+        if value not in valid_roles:
+            raise ValueError(f"El rol debe ser uno de: {valid_roles}")
+        return value
+
+
+# Clase para validar el login, solo necesita email y contraseña para ello
 class UserLoginSchema(BaseModel):
-    #Correo
+    # Correo
     email: EmailStr
     
-    #Contraseña
+    # Contraseña
     password: str

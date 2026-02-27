@@ -1,4 +1,4 @@
-#Importamos la clase del modelo tecnicos 
+#Importamos la clase del modelo tecnicos
 from app.models.technician import Technician
 #Importamos schema para validar
 from app.schemas.technician_schema import TechnicianCreateSchema
@@ -31,13 +31,12 @@ class TechnicianService:
     
     #Metodo para crear tecnico
     @staticmethod
-    def create_technician(data: dict):#Le entra como parametro un diccionario
+    def create_technician(data: dict):  # Le entra como parametro un diccionario
         try:
             #validamos los datos
             validate_data = TechnicianCreateSchema(**data)
         except ValidationError as e:
-            return {"error":e.errors()},400
-        #Creamos el nuevo tecnico
+            return {"error": e.errors()}, 400
 
         try:
             #Creamos el nuevo tecnico
@@ -46,7 +45,10 @@ class TechnicianService:
                 wilaya=validate_data.wilaya,
                 city=validate_data.city,
                 description=validate_data.description,
-                phone=validate_data.phone
+                phone=validate_data.phone,        
+                category_id=validate_data.category_id,
+                user_id=validate_data.user_id,    
+                is_active=validate_data.is_active 
             )
 
             #Lo guardamos en la base de datos
@@ -54,9 +56,9 @@ class TechnicianService:
             db.session.commit()
 
             #Retornamos el tecnico creado
-            return new_technician.to_dict(),201
-        except ValidationError:
+            return new_technician.to_dict(), 201
+
+        except Exception:
             db.session.rollback()
             #Mensaje del error
-            return {"error":"Error interno"},500
-        
+            return {"error": "Error interno"}, 500

@@ -143,9 +143,9 @@
               <div class="field">
                 <select name="categorias" id="categorias">
                   <option value="">Selecciona tu categoria</option>
-                  <option value="fontanero">Fontanero</option>
-                  <option value="mecanico">Mecánico</option>
-                  <option value="electricista">Electricista</option>
+                  <option value=1>Electricista</option>
+                  <option value=2>Fontanero</option>
+                  <option value=3>Mecánico</option>
                 </select>
               </div>
               <div class="field">
@@ -168,12 +168,10 @@
       </section>
     </section>
   </main>
-
-  <!-- =============================
-       HERO A LA DERECHA
-       ============================= -->
+  <!--Contenedor hero-->
   <aside class="hero"></aside>
-
+  <!--Contenedor para animacion de mensaje que el usuario fue creado correctamente-->
+  <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </div>
 <script src="../js/Register.js"></script>
 </body>
