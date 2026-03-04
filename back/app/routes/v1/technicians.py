@@ -9,7 +9,7 @@ technicians_bp = Blueprint("technicians_v1",__name__,url_prefix="/api/v1/technic
 #Endpoint que lista todos los tecnicos disponibles
 @technicians_bp.route("/",methods=["GET"])
 def get_technicians():
-    #Variable con el metodo de servicio
+    #Variable con el metodo de servicioS
     data,status = TechnicianService.get_technicians()
 
     #Retornamos los tecnicos
@@ -17,7 +17,6 @@ def get_technicians():
 
 #Endpoint recibe segun el id seleccionado del tecnico
 @technicians_bp.route("/<int:id>",methods=["GET"])
-@roles_required("technician")
 def get_technician(id):
     #Creamos variable que contiene el metodo y el estado 
     data,status = TechnicianService.get_by_id(id)
@@ -27,8 +26,8 @@ def get_technician(id):
 
 #Ruta para crear nuevo tecnico (solo admin, no se usa en registro)
 @technicians_bp.route("/",methods=["POST"])
-@jwt_required
 @roles_required("admin")
+@jwt_required
 def create_technician():
     #Creamos variable que contiene el metodo de creacion de tecnico con codigo de estado y recibe un diccionario
     data,status = TechnicianService.create_technician(request.json)
@@ -38,8 +37,8 @@ def create_technician():
  
 #Endpoint que recibe foto de perfil
 @technicians_bp.route("/avatar",methods=["POST"])
-@jwt_required
 @roles_required("technician")
+@jwt_required
 def get_photo_profile():
     #Recibe un archivo
     file = request.files.get("file")

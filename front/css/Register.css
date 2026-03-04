@@ -1,22 +1,13 @@
-/* =====================================
-   PALETA SAHALFIX — TEMA BLANCO
-   ===================================== */
 :root{
   --bg: #ffffff;
   --card: #ffffff;
-
-  /* Colores del logo SahalFix */
-  --text: #0F3C4C;          /* navy oscuro del logo */
-  --muted: #3E6B76;         /* navy atenuado */
-  
-  --line: #D7E2E3;          /* borde ligero ligado al teal */
-  --ring: #2BA5A5;          /* foco en teal */
-  
-  --accent: #2BA5A5;        /* teal principal */
-  --accent-press: #218686;  /* teal profundo */
-  
+  --text: #0F3C4C;
+  --muted: #3E6B76;
+  --line: #D7E2E3;
+  --ring: #2BA5A5;
+  --accent: #2BA5A5;
+  --accent-press: #218686;
   --danger: #E03A49;
-
   --radius: 14px;
   --gap: 16px;
   --tap: 44px;
@@ -38,9 +29,6 @@ body{
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* =====================================
-   LAYOUT: Formulario izquierda / Hero derecha
-   ===================================== */
 .app{
   min-height: 100dvh;
   display: grid;
@@ -67,11 +55,14 @@ body{
 
 .hero{
   display: none;
-  background-position: center right;
+  background-position: right center;
   background-size: cover;
   background-repeat: no-repeat;
   background-image: url("../assests/fondo.jpg");
+  background-attachment: fixed;
+  min-height: 100vh;
 }
+
 .header{
   display: flex;
   align-items: center;
@@ -92,6 +83,7 @@ body{
   font-size: 14px;
   margin: 0 0 16px 0;
 }
+
 .group{
   display: grid;
   gap: var(--gap);
@@ -118,13 +110,23 @@ textarea{
   background: #fff;
   color: var(--text);
   font-size: 15px;
-  transition: border-color var(--speed), outline-color var(--speed);
+  transition: border-color var(--speed), outline-color var(--speed), box-shadow var(--speed);
 }
 
 textarea{
-  min-height: 96px;
-  padding: 12px;
-  resize: vertical;
+  min-height: 110px;
+  padding: 14px 16px;
+  resize: none;
+  border: 1px solid rgba(15,60,76,0.12);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15,60,76,0.06);
+}
+
+textarea:focus{
+  border-color: var(--ring);
+  box-shadow: 4px 4px 0 4px rgba(43,165,165,0.15);
+  outline: none;
 }
 
 input::placeholder,
@@ -132,8 +134,7 @@ textarea::placeholder{
   color: #9FA4A6;
 }
 
-input:focus,
-textarea:focus{
+input:focus{
   border-color: var(--ring);
   outline: 2px solid rgba(43,165,165,0.25);
 }
@@ -166,13 +167,14 @@ textarea:focus{
   position: absolute;
   top: 0; bottom: 0;
   width: 50%;
-  background: rgba(43,165,165,0.10); /* teal ligero */
+  background: rgba(43,165,165,0.10);
   border-right: 1px solid var(--line);
   border-left: 1px solid var(--line);
   translate: 0 0;
   transition: translate var(--speed);
   pointer-events: none;
 }
+
 .expand{
   overflow: clip;
   display: grid;
@@ -189,6 +191,7 @@ textarea:focus{
 .inner{
   min-height: 0;
 }
+
 .actions{
   display: flex;
   gap: 12px;
@@ -214,6 +217,7 @@ textarea:focus{
   color: var(--text);
   border-color: var(--line);
 }
+
 .error{
   color: var(--danger);
   font-size: 12px;
@@ -223,6 +227,7 @@ textarea:focus{
   border-color: var(--danger) !important;
   outline: 2px solid rgba(224,58,73,0.25) !important;
 }
+
 @media (min-width: 1024px){
   .app{
     grid-template-columns: minmax(420px, 560px) 1fr;
@@ -238,12 +243,12 @@ textarea:focus{
     font-size: 22px;
   }
 }
-/*Select estilo input*/
+
 #wilaya ,#categorias{
   height: var(--tap);
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%230F3C4C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-down'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%230F3C4C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
   background-size: 16px;
   appearance: none;
   -webkit-appearance: none;
@@ -254,26 +259,24 @@ textarea:focus{
   margin-top: 20px;
 }
 
-/* Hover */
 #wilaya:hover ,#categorias:hover{
   border-color: var(--accent);
 }
 
-/* Focus igual que input */
 #wilaya:focus,#categorias:focus {
   border-color: var(--ring);
   outline: 2px solid rgba(43,165,165,0.25);
   outline-offset: 0;
 }
 
-/* Placeholder estilo (cuando value="") */
 #wilaya:invalid {
   color: #9FA4A6;
 }
+
 #categorias:has(option[value=""]:checked) {
   color: #9FA4A6;
 }
-/* Para evitar que el texto del option aparezca gris */
+
 #wilaya option {
   color: var(--text);
 }

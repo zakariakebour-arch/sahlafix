@@ -15,11 +15,7 @@ class Category(db.Model):
     slug = db.Column(db.String(100), nullable=False, unique=True)
 
     #Relacion con la tabla tecnicos
-    technicians = db.relationship(
-        "Technician",
-        backref="category",
-        lazy=True
-    )
+    technicians = db.relationship("Technician", back_populates="category")
 
     #Creamos un metodo que devuelve un diccionario listo para que sea un JSON valido 
     def to_dict(self, include_technicians=False):

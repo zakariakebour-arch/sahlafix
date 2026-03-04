@@ -1,6 +1,6 @@
 from app.extensions import db
 from datetime import datetime
-
+from app.models.category import Category
 #Creamos la clase que define la tabla
 class Technician(db.Model):
 
@@ -24,6 +24,9 @@ class Technician(db.Model):
         db.ForeignKey("categories.id"),
         nullable=False
     )
+
+    #Relacion con categoria
+    category = db.relationship("Category", back_populates="technicians")
 
     #Nombre completo
     full_name = db.Column(db.String(255), nullable=False)
@@ -56,5 +59,7 @@ class Technician(db.Model):
             "name": self.full_name,
             "description": self.description,
             "category_id": self.category_id,
-            "image_url": self.photo_profile
+            "image_url": self.photo_profile,
+            "category_name":self.category.name,
+            "wilaya":self.wilaya
         }

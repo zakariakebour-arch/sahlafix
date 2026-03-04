@@ -47,9 +47,7 @@ categoria_id = document.querySelector("#categorias").value;
   roleTecnico.addEventListener('click', () => setRole('tecnico'));
   updateThumb();
 
-  // ===============================
   // Validación
-  // ===============================
   function validateEmail(v) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
   }
@@ -125,16 +123,74 @@ categoria_id = document.querySelector("#categorias").value;
       });
 
       const data = await res.json();
+      const toast = document.getElementById("toast");
+
+      function showToast(message, type = "error") {
+        toast.textContent = message;
+        toast.style.position = "fixed";
+        toast.style.bottom = "30px";
+        toast.style.left = "50%";
+        toast.style.transform = "translateX(-50%)";
+        toast.style.padding = "14px 22px";
+        toast.style.borderRadius = "12px";
+        toast.style.fontWeight = "600";
+        toast.style.boxShadow = "0 10px 30px rgba(0,0,0,0.08)";
+        toast.style.zIndex = "9999";
+        toast.style.opacity = "0";
+        toast.style.transition = "all .3s ease";
+
+        if (type === "success") {
+          toast.style.background = "#2BA5A5";
+          toast.style.color = "#fff";
+          toast.style.border = "none";
+        } else {
+          toast.style.background = "#fff";
+          toast.style.color = "#E03A49";
+          toast.style.border = "1px solid rgba(224,58,73,0.25)";
+        }
+
+        requestAnimationFrame(() => {
+          toast.style.opacity = "1";
+          toast.style.bottom = "40px";
+        });
+
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          toast.style.bottom = "30px";
+        }, 3500);
+      }
 
       if (res.status === 201) {
           //Redirigimos a iniciar sesion cuando es correcto
-         window.location.href = "/auth/Login.html";
+          showToast("Cuenta creada correctamente", "success");
+          setTimeout(() => {
+            window.location.href = "file:///C:/Users/Usuario/Desktop/sahlafix/front/auth/Login.html";
+          }, 1200);
+      } else if(res.status === 409){
+          //Mensaje de que el usuario exsiste
+          showError(fields.email, "Este email ya está registrado.");
+          showToast("El usuario ya existe.");
+      } else if(res.status === 400){
+          //Mensaje de datos inválidos
+          showToast("Datos inválidos. Revisa los campos.");
       } else {
         console.error(data);
       }
     } catch (err) {
       console.error('Error al conectar con backend:', err);
-      alert('Error de conexión. Intenta nuevamente.');
+      const toast = document.getElementById("toast");
+      toast.textContent = "Error de conexión. Intenta nuevamente.";
+      toast.style.position = "fixed";
+      toast.style.bottom = "40px";
+      toast.style.left = "50%";
+      toast.style.transform = "translateX(-50%)";
+      toast.style.padding = "14px 22px";
+      toast.style.background = "#fff";
+      toast.style.color = "#E03A49";
+      toast.style.borderRadius = "12px";
+      toast.style.boxShadow = "0 10px 30px rgba(0,0,0,0.08)";
+      toast.style.border = "1px solid rgba(224,58,73,0.25)";
+      toast.style.zIndex = "9999";
     }
   });
 })();

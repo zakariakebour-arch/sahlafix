@@ -93,7 +93,7 @@ class UserRegister:
     
     #Variable que genera el token para el usuario
     token = generate_token(user)
-
+    
     #Mensaje de exsito 
     return {
       "message": "exito",

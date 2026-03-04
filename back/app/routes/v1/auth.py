@@ -3,6 +3,10 @@ from flask import Blueprint,request,jsonify
 from app.services.user_service import UserRegister
 #Importamos technician service
 from app.services.technician_service import TechnicianService
+#Importamos 
+from flask import jsonify, g
+#Importamos el decorador
+from app.utils.helpers import jwt_required  
 
 auth_bp = Blueprint("auth_v1",__name__,url_prefix="/api/v1/auth")
 
@@ -82,4 +86,13 @@ def login():
     data,status = UserRegister.login(request.json)
 
     #Retoramos mensaje de resultado con el codigo de estado
-    return jsonify(data),status
+    return jsonify(data),status 
+
+#Ruta para acceder con jwt
+@auth_bp.route("/me", methods=["GET"])
+@jwt_required
+def me():
+    u = g.current_user
+    return jsonify({
+        "user": {"id": u.id, "email": u.email, "role": u.role}
+    }), 200
