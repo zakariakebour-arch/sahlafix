@@ -75,3 +75,43 @@ class TechnicianService:
             db.session.rollback()
             #Mensaje del error
             return {"error": "Error interno"}, 500
+        
+    #Metodo para busqueda
+    @staticmethod
+    def search_by_name(name:str):
+        # Buscamos usuarios y técnicos, usando Technician.full_name
+        results = db.session.query(User, Technician)\
+            .outerjoin(Technician, Technician.user_id == User.id)\
+            .filter(Technician.full_name.ilike(f"%{name}%"))\
+            .all()
+        
+        # Expunigir el objeto para que no quede en sesion
+        for user, tech in results:
+            db.session.expunge(user)
+            if tech:
+                db.session.expunge(tech)
+            # Formateamos resultado
+
+        data = []
+        for user, technician in results:
+            item = {
+                "user_id": user.id,
+                "email": user.email,
+                "role": user.role,
+                "phone": user.phone
+            }
+            if technician:
+                # Añadimos datos de técnico si existen
+                item.update({
+                    "technician_id": technician.id,
+                    "full_name": technician.full_name,
+                    "category_id": technician.category_id,
+                    "city": technician.city,
+                    "wilaya": technician.wilaya,
+                    "description": technician.description,
+                    "image_url": technician.photo_profile,
+                })
+            data.append(item)
+            #Si no encuentra nada
+        return data, 200
+        

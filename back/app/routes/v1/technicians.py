@@ -47,3 +47,19 @@ def get_photo_profile():
         return jsonify({"error":"Archivo requerido"}),400
     
     return jsonify({"message":"Archivo recibido"}),200
+
+#Ruta para busqueda de tecnicos con el buscador
+@technicians_bp.route("/search", methods=["GET"])
+def buscar():
+    # Obtenemos el parámetro de la query string
+    name = request.args.get("name", "").strip()
+    
+    # Validamos que se haya pasado un valor
+    if not name:
+        return jsonify({"error": "Se requiere el parámetro 'name'"}), 400
+
+    # Aqui va el enpoint que vamos a exponer para la busqueda
+    data, status = TechnicianService.search_by_name(name)
+
+    # Retornamos resultado
+    return jsonify(data), status

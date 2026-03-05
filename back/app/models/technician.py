@@ -52,6 +52,13 @@ class Technician(db.Model):
     #Columna que registra el tiempo de creacion
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
+    #Columnas de longitud y latitud para calcular y posicionar tecnicos en el mapa
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+
+    #Para guardar la ubicacion reciente
+    last_location_update = db.Column(db.DateTime, nullable=True)
+
     #Creamos un metodo que retorna un diccionario con la información asociada al tecnico
     def to_dict(self):
         return {
@@ -61,5 +68,9 @@ class Technician(db.Model):
             "category_id": self.category_id,
             "image_url": self.photo_profile,
             "category_name":self.category.name,
-            "wilaya":self.wilaya
+            "wilaya":self.wilaya,
+            "city":self.city,
+            "latitude":self.latitude,
+            "longitude":self.longitude,
+            "last_location":self.last_location_update
         }
