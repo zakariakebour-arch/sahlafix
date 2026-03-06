@@ -43,3 +43,23 @@ class UserLoginSchema(BaseModel):
     
     # Contraseña
     password: str
+
+#Creamos clase que valide los datos de ubicacion
+class UserLocationSchema(BaseModel):
+
+    latitude: float
+    longitude: float
+
+    @field_validator("latitude")
+    @classmethod
+    def validate_latitude(cls, value):
+        if value < -90 or value > 90:
+            raise ValueError("Latitud inválida")
+        return value
+
+    @field_validator("longitude")
+    @classmethod
+    def validate_longitude(cls, value):
+        if value < -180 or value > 180:
+            raise ValueError("Longitud inválida")
+        return value

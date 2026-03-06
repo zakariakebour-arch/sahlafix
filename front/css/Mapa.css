@@ -1,0 +1,304 @@
+/* ═══════════════════════════════════════════════
+   Mapa.css — SahlaFix
+   ═══════════════════════════════════════════════ */
+
+:root {
+  --primary: #0EA5A5;
+  --primary-dark: #0C8F8F;
+  --primary-light: #F0FAFA;
+  --primary-mid: #CBF0F0;
+  --text: #0A2E3A;
+  --muted: #8FA3AC;
+  --border: #E2EBED;
+  --border-soft: #EEF3F5;
+  --bg: #F6F9FA;
+  --card: #FFFFFF;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --nav-h: 64px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── MAPA ocupa todo menos el nav ── */
+#map {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--nav-h);
+  width: 100%;
+  z-index: 1;
+}
+
+/* ── BOTTOM NAV (igual que Home) ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-h);
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-soft);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -4px 20px rgba(10,46,58,0.06);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+  text-decoration: none;
+}
+
+.nav-item:hover { background: var(--bg); }
+
+.nav-item svg {
+  width: 22px; height: 22px;
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.15s;
+}
+
+.nav-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.2px;
+}
+
+.nav-item.active svg   { stroke: var(--primary); }
+.nav-item.active .nav-label { color: var(--primary); }
+
+a.nav-item svg        { stroke: var(--muted); }
+a.nav-item .nav-label { color: var(--muted); }
+
+/* ── GLOBO DE TÉCNICO ── */
+.tech-marker {
+  position: relative;
+  width: 52px;
+  height: 62px;
+  cursor: pointer;
+}
+
+.tech-marker-bubble {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid white;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(10,46,58,0.22);
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s;
+}
+
+.tech-marker-bubble img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tech-marker-initials {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1;
+}
+
+/* Punta del globo */
+.tech-marker-tail {
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid white;
+  margin: 0 auto;
+  filter: drop-shadow(0 2px 3px rgba(10,46,58,0.15));
+}
+
+/* Color del borde según disponibilidad */
+.tech-marker-bubble.available  { border-color: var(--primary); }
+.tech-marker-bubble.busy       { border-color: #F59E0B; }
+.tech-marker-bubble.offline    { border-color: var(--muted); }
+
+/* Pulse en disponibles */
+.tech-marker-bubble.available::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  opacity: 0;
+  animation: markerPulse 2.5s infinite;
+}
+
+@keyframes markerPulse {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.5); }
+}
+
+/* ── POPUP personalizado ── */
+.leaflet-popup-content-wrapper {
+  border-radius: 14px !important;
+  box-shadow: 0 4px 20px rgba(10,46,58,0.14) !important;
+  border: 1.5px solid var(--border) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: 200px !important;
+}
+
+.leaflet-popup-tip-container { display: none; }
+
+.tech-popup {
+  padding: 14px 16px;
+}
+
+.tech-popup-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tech-popup-avatar {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  border: 1.5px solid var(--primary-mid);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tech-popup-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.tech-popup-avatar span {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.tech-popup-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.tech-popup-cat {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.tech-popup-zone {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.tech-popup-zone svg {
+  width: 12px; height: 12px;
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  flex-shrink: 0;
+}
+
+.tech-popup-btn {
+  width: 100%;
+  height: 36px;
+  background: var(--text);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.tech-popup-btn:hover { background: var(--primary-dark); }
+
+/* ── BADGE CONTADOR (desktop sidebar) ── */
+@media (min-width: 768px) {
+  .bottom-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: auto;
+    width: 72px;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 4px;
+    padding: 20px 0;
+    border-top: none;
+    border-right: 1px solid var(--border-soft);
+    box-shadow: 2px 0 12px rgba(10,46,58,0.04);
+  }
+
+  #map {
+    left: 72px;
+    bottom: 0;
+  }
+
+  .nav-label { display: none; }
+
+  .nav-item {
+    width: 100%;
+    padding: 13px 0;
+    border-radius: 0;
+    justify-content: center;
+  }
+
+  .nav-item.active {
+    background: var(--primary-light);
+    border-right: 2px solid var(--primary);
+  }
+}

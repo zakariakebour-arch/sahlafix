@@ -24,3 +24,9 @@ class User(db.Model):
 
     # Relación 1 a 1 con Technician
     technician = db.relationship("Technician", backref="user", uselist=False)
+
+    #Latitud del usuario
+    latitude = db.Column(db.Float, nullable=True)
+
+    #Longitud del usuario
+    longitude = db.Column(db.Float, nullable=True)

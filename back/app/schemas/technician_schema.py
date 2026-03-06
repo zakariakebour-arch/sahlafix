@@ -1,12 +1,16 @@
 #Importamos pydantic
 from pydantic import BaseModel, field_validator
+
 #Importamos opcion para datos opcionales
 from typing import Optional
+
 #Importamos validador profesional de numeros de telefono
 import phonenumbers
 
+
 #Creamos la clase TechnicianCreateSchema que sera la encargada de validar la creacion del tecnico
 class TechnicianCreateSchema(BaseModel):
+
     #Nombre completo como string
     full_name: str
 
@@ -31,51 +35,91 @@ class TechnicianCreateSchema(BaseModel):
     #Usuario id como numero entero
     user_id: int
 
+    #Latitud opcional
+    latitude: Optional[float] = None
+
+    #Longitud opcional
+    longitude: Optional[float] = None
+
+
     #Validador de nombre
     @field_validator("full_name")
     @classmethod
-    def validate_full_name(cls, value: str):  # Entra parametro  
-        if len(value.strip()) < 3:  # Corregido < 
+    def validate_full_name(cls, value: str):
+        if len(value.strip()) < 3:
             raise ValueError("El nombre completo debe tener al menos 3 caracteres.")
         return value
+
 
     #Validador de categoria id
     @field_validator("category_id")
     @classmethod
     def validate_category_id(cls, value: int):
-        if value <= 0:  # Corregido <=
+        if value <= 0:
             raise ValueError("category_id debe ser un entero válido.")
         return value
+
 
     #Validador de valor wilaya
     @field_validator("wilaya")
     @classmethod
     def validate_wilaya(cls, value: str):
-        if len(value.strip()) < 2:  # Corregido <
+        if len(value.strip()) < 2:
             raise ValueError("La wilaya no es válida.")
         return value
+
 
     #Validador de ciudad
     @field_validator("city")
     @classmethod
     def validate_city(cls, value: Optional[str]):
-        if value and len(value.strip()) < 2:  # Corregido <
+        if value and len(value.strip()) < 2:
             raise ValueError("La ciudad no es válida.")
-        return value  # De lo contrario retorna el valor como es correcto
+        return value
+
 
     #Validador de descripcion
     @field_validator("description")
     @classmethod
-    def validate_description(cls, value: Optional[str]):  # Le entra el parametro opcional
-        if value and len(value) > 500:  # Corregido >
+    def validate_description(cls, value: Optional[str]):
+        if value and len(value) > 500:
             raise ValueError("La descripción no puede superar los 500 caracteres.")
         return value
+
+
+    #Validador de latitud
+    @field_validator("latitude")
+    @classmethod
+    def validate_latitude(cls, value: Optional[float]):
+        if value is None:
+            return value
+
+        if value < -90 or value > 90:
+            raise ValueError("La latitud debe estar entre -90 y 90.")
+
+        return value
+
+
+    #Validador de longitud
+    @field_validator("longitude")
+    @classmethod
+    def validate_longitude(cls, value: Optional[float]):
+        if value is None:
+            return value
+
+        if value < -180 or value > 180:
+            raise ValueError("La longitud debe estar entre -180 y 180.")
+
+        return value
+
 
     #Validamos por completo y de manera profesional con la libreria phonenumbers
     @field_validator("phone")
     @classmethod
-    def validate_and_normalize_phone(cls, v: str) -> str:  # Corregida sintaxis
+    def validate_and_normalize_phone(cls, v: str) -> str:
+
         raw = (v or "").strip()
+
         if not raw:
             raise ValueError("El teléfono es obligatorio")
 
@@ -91,7 +135,7 @@ class TechnicianCreateSchema(BaseModel):
                         num, phonenumbers.PhoneNumberFormat.E164
                     )
             except Exception:
-                pass  # seguiremos probando abajo
+                pass
 
         # Probar por regiones conocidas
         for region in candidate_regions:
@@ -108,3 +152,4 @@ class TechnicianCreateSchema(BaseModel):
         raise ValueError(
             "Número de teléfono inválido. Usa formato internacional (+34..., +213...) o un número local válido."
         )
+

@@ -1,5 +1,7 @@
 categoria_id = document.querySelector("#categorias").value;
+
 (function() {
+
   const form = document.getElementById('user-form');
   const roleCliente = document.getElementById('role-cliente');
   const roleTecnico = document.getElementById('role-tecnico');
@@ -27,8 +29,10 @@ categoria_id = document.querySelector("#categorias").value;
   function setRole(nextRole) {
     role = nextRole;
     const isTecnico = role === 'tecnico';
+
     roleCliente.setAttribute('aria-pressed', String(!isTecnico));
     roleCliente.setAttribute('aria-selected', String(!isTecnico));
+
     roleTecnico.setAttribute('aria-pressed', String(isTecnico));
     roleTecnico.setAttribute('aria-selected', String(isTecnico));
 
@@ -44,9 +48,9 @@ categoria_id = document.querySelector("#categorias").value;
 
   roleCliente.addEventListener('click', () => setRole('cliente'));
   roleTecnico.addEventListener('click', () => setRole('tecnico'));
+
   updateThumb();
 
-  // Validación básica
   function validateEmail(v) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
   }
@@ -59,10 +63,12 @@ categoria_id = document.querySelector("#categorias").value;
 
   function clearError(el) { showError(el, ''); }
 
-  // Toast
   const toast = document.getElementById("toast");
+
   function showToast(message, type = "error") {
+
     toast.textContent = message;
+
     toast.style.position = "fixed";
     toast.style.bottom = "30px";
     toast.style.left = "50%";
@@ -96,96 +102,180 @@ categoria_id = document.querySelector("#categorias").value;
     }, 3500);
   }
 
-  // Envío del formulario
+  /* ─────────────────────────────
+     ENVÍO DEL FORMULARIO
+  ───────────────────────────── */
+
   form.addEventListener('submit', async (e) => {
+
     e.preventDefault();
 
-    // Validación local
     let ok = true;
-    const requiredIds = ['name','email','password'].concat(role === 'tecnico' ? ['phone','wilaya','city'] : []);
+
+    const requiredIds = ['name','email','password']
+      .concat(role === 'tecnico' ? ['phone','wilaya','city'] : []);
+
     requiredIds.forEach(id => {
+
       const el = fields[id];
+
       if (!el.value.trim()) {
         showError(el, 'Este campo es obligatorio.');
         ok = false;
       }
+
     });
 
     if (fields.email.value && !validateEmail(fields.email.value)) {
       showError(fields.email, 'Introduce un email válido.');
       ok = false;
     }
+
     if (fields.password.value && fields.password.value.length < 8) {
       showError(fields.password, 'Mínimo 8 caracteres.');
       ok = false;
     }
+
     if (!ok) return;
 
     let payload;
     let url;
 
+    /* ─────────────────────────────
+       SI ES TÉCNICO → OBTENER GPS
+    ───────────────────────────── */
+
     if (role === 'tecnico') {
+
       url = 'http://127.0.0.1:5000/api/v1/auth/register-technician';
-      payload = {
-        email: fields.email.value.trim(),
-        password: fields.password.value,
-        role: "technician",
-        full_name: fields.name.value.trim(),
-        phone: fields.phone.value.trim(),
-        wilaya: fields.wilaya.value.trim(),
-        city: fields.city.value.trim(),
-        description: fields.desc.value.trim(),
-        category_id: Number(fields.categorias.value)
-      };
-    } else {
+
+      if (!navigator.geolocation) {
+        showToast("Tu navegador no permite geolocalización.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(async function(pos){
+
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        payload = {
+          email: fields.email.value.trim(),
+          password: fields.password.value,
+          role: "technician",
+          full_name: fields.name.value.trim(),
+          phone: fields.phone.value.trim(),
+          wilaya: fields.wilaya.value.trim(),
+          city: fields.city.value.trim(),
+          description: fields.desc.value.trim(),
+          category_id: Number(fields.categorias.value),
+          latitude: lat,
+          longitude: lng
+        };
+
+        sendRegister(url,payload);
+
+      }, function(){
+        showToast("Debes permitir ubicación para registrarte como técnico.");
+      });
+
+    }
+
+    else {
+
       url = 'http://127.0.0.1:5000/api/v1/auth/register';
+
       payload = {
         email: fields.email.value.trim(),
         password: fields.password.value,
         role: "user",
         name: fields.name.value.trim()
       };
+
+      sendRegister(url,payload);
+
     }
 
+  });
+
+
+  /* ─────────────────────────────
+     FUNCIÓN QUE ENVÍA AL BACKEND
+  ───────────────────────────── */
+
+  async function sendRegister(url,payload){
+
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+
+      const res = await fetch(url,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
       });
 
       const data = await res.json();
 
-      if (res.status === 201) {
-        showToast("Cuenta creada correctamente", "success");
-        setTimeout(() => {
-          window.location.href = "file:///C:/Users/Usuario/Desktop/sahlafix/front/auth/Login.html";
-        }, 1200);
+      if(res.status === 201){
 
-      } else if (res.status === 409) {
-        showError(fields.email, "Este email ya está registrado.");
+        showToast("Cuenta creada correctamente","success");
+
+        setTimeout(()=>{
+
+          window.location.href="Login.html";
+
+        },1200);
+
+      }
+
+      else if(res.status === 409){
+
+        showError(fields.email,"Este email ya está registrado.");
         showToast("El usuario ya existe.");
 
-      } else if (res.status === 400) {
-        // Mostrar mensaje de error profesional del backend
-        if (data.error) {
-          // Intentar detectar el campo específico
-          if (data.error.includes('Número de teléfono inválido')) {
-            showError(fields.phone, "Número de teléfono inválido. Usa formato +34XXXXXXXXX o +213XXXXXXXXX");
+      }
+
+      else if(res.status === 400){
+
+        if(data.error){
+
+          if(data.error.includes('Número de teléfono inválido')){
+
+            showError(fields.phone,"Número inválido.");
             showToast("Número de teléfono inválido.");
-          } else {
-            showToast(data.error);
+
           }
-        } else {
-          showToast("Datos inválidos. Revisa los campos.");
+
+          else{
+
+            showToast(data.error);
+
+          }
+
         }
 
-      } else {
-        console.error(data);
+        else{
+
+          showToast("Datos inválidos.");
+
+        }
+
       }
-    } catch (err) {
-      console.error('Error al conectar con backend:', err);
-      showToast("Error de conexión. Intenta nuevamente.");
+
+      else{
+
+        console.error(data);
+
+      }
+
     }
-  });
+
+    catch(err){
+
+      console.error("Error conexión:",err);
+      showToast("Error de conexión.");
+
+    }
+
+  }
+
 })();

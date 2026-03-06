@@ -63,3 +63,18 @@ def buscar():
 
     # Retornamos resultado
     return jsonify(data), status
+
+#Metodo que recibe longitud y latitud para actualizar
+@technicians_bp.route("/<int:technician_id>/location",methods=["PUT"])
+@roles_required("technician")
+@jwt_required
+def location(technician_id):
+
+    #Recibimos datos del body en formato JSON
+    data = request.get_json()
+
+    #Llamamos el metodo del service
+    data,status = TechnicianService.location_request(technician_id,data)
+
+    #Retornamos mensaje de resultado
+    return jsonify(data),status
