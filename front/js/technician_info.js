@@ -24,10 +24,10 @@
         //Nombre del usuario 
         document.querySelector("title").textContent = tech.name;
 
-        // DESCRIPCIÓN
+        // Descripcion
         document.getElementById("profile-desc").textContent = tech.description ?? "Sin descripción disponible.";
 
-        // INFO
+        // Informacion del tecnico
         document.getElementById("info-zone").textContent = tech.wilaya ?? "—";
         document.getElementById("info-category").textContent = tech.category_name ?? "—";
 
@@ -39,4 +39,56 @@
       }
     }
 
-    loadTechnician();
+loadTechnician();
+
+const API_BASE = "http://127.0.0.1:5000/api/v1";
+
+const contactBtn = document.getElementById("contact-btn");
+
+contactBtn.addEventListener("click", async () => {
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Debes iniciar sesión");
+    return;
+  }
+
+  const userId = localStorage.getItem("user_id");
+  console.log(localStorage.getItem('user_id'))
+  try {
+
+    const res = await fetch(`${API_BASE}/message/conversations`, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+
+      body: JSON.stringify({
+        user_id: userId,
+        technician_id: id
+      })
+
+    });
+
+    if (!res.ok) {
+      throw new Error("Error creando conversación");
+    }
+
+    const data = await res.json();
+
+    const conversationId = data.id || data.conversation_id;
+
+    window.location.href = `chat_detail.html?id=${conversationId}`;
+
+  } catch (err) {
+
+    console.error(err);
+    alert("No se pudo iniciar el chat");
+
+  }
+
+});

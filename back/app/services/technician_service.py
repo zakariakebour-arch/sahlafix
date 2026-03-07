@@ -104,7 +104,7 @@ class TechnicianService:
         # Buscamos usuarios y técnicos, usando Technician.full_name
         results = db.session.query(User, Technician)\
             .outerjoin(Technician, Technician.user_id == User.id)\
-            .filter(Technician.full_name.ilike(f"%{name}%"))\
+            .filter(User.full_name.ilike(f"%{name}%"))\
             .all()
         
         # Expunigir el objeto para que no quede en sesion
@@ -120,6 +120,7 @@ class TechnicianService:
 
             item = {
                 "user_id": user.id,
+                "full_name":user.full_name,
                 "email": user.email,
                 "role": user.role,
                 "phone": user.phone
@@ -130,7 +131,6 @@ class TechnicianService:
                 # Añadimos datos de técnico si existen
                 item.update({
                     "technician_id": technician.id,
-                    "full_name": technician.full_name,
                     "category_id": technician.category_id,
                     "city": technician.city,
                     "wilaya": technician.wilaya,

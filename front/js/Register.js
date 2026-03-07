@@ -189,7 +189,7 @@ categoria_id = document.querySelector("#categorias").value;
         email: fields.email.value.trim(),
         password: fields.password.value,
         role: "user",
-        name: fields.name.value.trim()
+        full_name: fields.name.value.trim()
       };
 
       sendRegister(url,payload);
@@ -216,7 +216,6 @@ categoria_id = document.querySelector("#categorias").value;
       const data = await res.json();
 
       if(res.status === 201){
-
         showToast("Cuenta creada correctamente","success");
 
         setTimeout(()=>{

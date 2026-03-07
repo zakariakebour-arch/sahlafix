@@ -40,8 +40,9 @@ class UserRegister:
     #Creamos nuevo usuario
     new_user = User(
       email=email,
-      password_hash=password_hash,   #Corrección: nombre correcto de columna
-      role=validate_data.role
+      password_hash=password_hash,   
+      role=validate_data.role,
+      full_name=validate_data.full_name,
     )
 
     #Hacemos un try para conexion con la base de datos por si falla
@@ -63,6 +64,7 @@ class UserRegister:
       "user": {
         "id": new_user.id,
         "email": new_user.email,
+        "full_name":new_user.full_name,
         "role": new_user.role
       }
     }, 201
@@ -100,6 +102,7 @@ class UserRegister:
       "token": token,
       "user": {
         "id": user.id,
+        "full_name":user.full_name,
         "email": user.email,
         "role": user.role
       }

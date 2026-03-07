@@ -7,6 +7,8 @@ class User(db.Model):
     # Clave primaria
     id = db.Column(db.Integer, primary_key=True)
 
+    #Columna para nombre
+    full_name = db.Column(db.String(100),unique=True,nullable=False)
     # Correo único
     email = db.Column(db.String(255), unique=True, nullable=False)
 

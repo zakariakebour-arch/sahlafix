@@ -87,7 +87,15 @@ function buildCard(tech, query, index) {
 
   const card = document.createElement('a');
   card.className = 'card';
-  card.href = `technician_info.html?id=${tech.technician_id}`;
+
+  /* Detectamos si es técnico o cliente */
+  const isTechnician = tech.role === "technician";
+
+  /* Si es técnico va a su ficha, si es cliente a perfil */
+  card.href = isTechnician
+    ? `technician_info.html?id=${tech.technician_id}`
+    : `profile.html?id=${tech.user_id}`;
+
   card.style.animationDelay = `${index * 60}ms`;
 
   card.innerHTML = `
@@ -95,7 +103,7 @@ function buildCard(tech, query, index) {
     <div class="card-body">
       <div class="card-name">${highlight(name, query)}</div>
       <div class="card-meta">
-        <span class="badge-category">${escapeHtml(categoryLabel)}</span>
+        <span class="badge-category">${tech.role === "technician" ? escapeHtml(categoryLabel) : "Cliente"}</span>
         <span class="dot"></span>
         <svg style="width:11px;height:11px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24">
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
@@ -133,7 +141,7 @@ function renderResults(technicians, query) {
 
   /* Results count header */
   const n = technicians.length;
-  resultsCount.innerHTML = `<strong>${n}</strong> técnico${n !== 1 ? 's' : ''} encontrado${n !== 1 ? 's' : ''}`;
+  resultsCount.innerHTML = `<strong>${n}</strong> resultado${n !== 1 ? 's' : ''} encontrado${n !== 1 ? 's' : ''}`;
   resultsHeader.style.display = 'flex';
 }
 

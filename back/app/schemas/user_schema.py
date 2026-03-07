@@ -6,6 +6,7 @@ class UserCreateSchema(BaseModel):
     password: str
     role: str | None = "user"  # Rol es un string y si no se selecciona que rol es, se asigna user por defecto
 
+    full_name: str
     # Validador de contraseña
     @field_validator("password")
     @classmethod

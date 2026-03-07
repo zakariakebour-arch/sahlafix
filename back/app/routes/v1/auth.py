@@ -69,7 +69,8 @@ def register_technician():
     user_data = {
         "email": data.get("email"),
         "password": data.get("password"),
-        "role": "technician"
+        "role": "technician",
+        "full_name":data.get("full_name")
     }
     
     user_response, status = UserRegister.create_user(user_data)
@@ -108,6 +109,10 @@ def login():
     #Creamos variable que contiene el metodo y codigo de estado
     data,status = UserRegister.login(request.json)
 
+    if status != 200:
+        return jsonify(data),status
+    
+
     #Retoramos mensaje de resultado con el codigo de estado
     return jsonify(data),status 
 
@@ -117,5 +122,5 @@ def login():
 def me():
     u = g.current_user
     return jsonify({
-        "user": {"id": u.id, "email": u.email, "role": u.role}
+        "user": {"id": u.id, "email": u.email,"full_name":u.full_name, "role": u.role}
     }), 200

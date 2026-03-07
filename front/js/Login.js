@@ -50,6 +50,10 @@ function showToast(message, type = "error") {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
+        const me = await res.json();
+        localStorage.setItem('user_id', me.user.id);
+        localStorage.setItem('email', me.user.email); // opcional, útil
+        localStorage.setItem('role', me.user.role);   // opcional
         window.location.href = 'file:///C:/Users/Usuario/Desktop/sahlafix/front/auth/Home.html';
         return;
       } else {
@@ -79,8 +83,9 @@ form.addEventListener('submit', async (e) => {
   if(resp.ok){
       const data = await resp.json();
       const token = data.token;
+      const userID = data.user.id;
+      localStorage.setItem("user_id",userID)
       localStorage.setItem('token', token);
-
       // Validar inmediatamente con /me y redirigir
       const resMe = await fetch('http://127.0.0.1:5000/api/v1/auth/me', {
         headers: { Authorization: `Bearer ${token}` }
@@ -92,6 +97,7 @@ form.addEventListener('submit', async (e) => {
         }, 1000);
       } else {
         localStorage.removeItem('token');
+        localStorage.removeItem('user_id');
         showToast("Token inválido. Inicia sesión de nuevo.");
       }
   }else{
