@@ -1,3 +1,5 @@
+const API_BASE = 'http://127.0.0.1:5000/api/v1';
+
 //Hacemos una promesa para sacar las categorias disponibles en el servidor
 (async () => {
     //Seleccionamos el contenedor de categorias
@@ -11,7 +13,7 @@
     // Mantener la opción placeholder inicial
     const placeholder = selectCategorias.querySelector('option[value=""]') || selectCategorias.querySelector('option:first-child');
 
-    // Estado: “cargando”
+    // Estado: "cargando"
     const originalText = placeholder ? placeholder.textContent : 'Categoría';
     if (placeholder) {
       placeholder.textContent = 'Cargando categorías...';
@@ -21,7 +23,7 @@
     }
 
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/categories', { method: 'GET' });
+      const res = await fetch(`${API_BASE}/categories`, { method: 'GET' });
       if (!res.ok) throw new Error('Error al obtener categorías');
 
       const categorias = await res.json(); // esperado la respuesta del servidor
@@ -90,10 +92,21 @@
       console.log("Algun error ha ocurrido");
     }
   })();
+
+
+//Resolver URL de avatar del tecnico
+function resolveAvatarUrl(imageUrl) {
+  if (!imageUrl) return null;
+  if (imageUrl.startsWith('http')) return imageUrl;
+  if (imageUrl.includes('/uploads/avatars')) return `http://127.0.0.1:5000${imageUrl}`;
+  return `${API_BASE}/uploads/avatars/${imageUrl}`;
+}
+
+
 // Obtener y renderizar tecnicos dinamicamente haciendo una peticion al servidor
 (async () => {
   try {
-    const res = await fetch('http://127.0.0.1:5000/api/v1/technicians/', {
+    const res = await fetch(`${API_BASE}/technicians/`, {
       method: "GET"
     });
 
@@ -115,10 +128,19 @@
       //Aqui creamos enlance que escoje el indice con la ruta dinamicamente,asi podremos consultar el servidor para la informacion del usuario
       card.href = `technician_info.html?id=${tech.id}`;
 
-      // Avatar (primera letra del nombre)
+      // Avatar con foto si existe, si no primera letra del nombre
       const avatar = document.createElement('div');
       avatar.className = 'avatar';
-      avatar.textContent = tech.name.charAt(0).toUpperCase();
+      const avatarSrc = resolveAvatarUrl(tech.image_url);
+      if (avatarSrc) {
+        const img = document.createElement('img');
+        img.src = avatarSrc;
+        img.alt = tech.name.charAt(0).toUpperCase();
+        img.onerror = () => { img.style.display = 'none'; avatar.textContent = tech.name.charAt(0).toUpperCase(); };
+        avatar.appendChild(img);
+      } else {
+        avatar.textContent = tech.name.charAt(0).toUpperCase();
+      }
 
       // Body
       const body = document.createElement('div');
@@ -164,12 +186,14 @@
     console.error("Error:", error);
   }
 })();
+
+
 (async () => {
   const cardsContainer = document.querySelector('.cards');
   let allTechnicians = [];
 
   async function fetchTechnicians() {
-    const res = await fetch('http://127.0.0.1:5000/api/v1/technicians/', { method: "GET" });
+    const res = await fetch(`${API_BASE}/technicians/`, { method: "GET" });
     if (!res.ok) throw new Error("Error al cargar técnicos");
     return await res.json();
   }
@@ -181,9 +205,19 @@
       card.className = 'card';
       card.href = `technician_info.html?id=${tech.id}`;
 
+      // Avatar con foto si existe, si no primera letra del nombre
       const avatar = document.createElement('div');
       avatar.className = 'avatar';
-      avatar.textContent = tech.name.charAt(0).toUpperCase();
+      const avatarSrc = resolveAvatarUrl(tech.image_url);
+      if (avatarSrc) {
+        const img = document.createElement('img');
+        img.src = avatarSrc;
+        img.alt = tech.name.charAt(0).toUpperCase();
+        img.onerror = () => { img.style.display = 'none'; avatar.textContent = tech.name.charAt(0).toUpperCase(); };
+        avatar.appendChild(img);
+      } else {
+        avatar.textContent = tech.name.charAt(0).toUpperCase();
+      }
 
       const body = document.createElement('div');
       body.className = 'card-body';
@@ -256,6 +290,8 @@
     console.error("Error:", error);
   }
 })();
+
+
 function filterAndRender(categoryId, wilaya) {
     let filtered = allTechnicians;
 

@@ -285,3 +285,20 @@ saveBtn.addEventListener('click', async () => {
    ══════════════════════════════════════ */
 
 loadProfile();
+    /* ── Preview de foto al seleccionar ── */
+    document.getElementById('field-photo').addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('photo-preview');
+      const label   = document.getElementById('photo-label');
+      const wrapper = document.getElementById('photo-upload-wrapper');
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        label.textContent = file.name.length > 22 ? file.name.slice(0, 20) + '…' : file.name;
+        wrapper.classList.add('has-photo');
+      };
+      reader.readAsDataURL(file);
+    });

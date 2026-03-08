@@ -36,10 +36,6 @@ function showState(name) {
 
   if (map[name]) map[name].style.display = 'flex';
 }
-
-/* ══════════════════════════════════════
-   HIGHLIGHT MATCH
-   ══════════════════════════════════════ */
 function highlight(text, query) {
   if (!query) return escapeHtml(text);
   const escaped = escapeHtml(text);
@@ -63,7 +59,6 @@ function buildCard(tech, query, index) {
   const wilaya   = tech.wilaya     ?? '';
   const city     = tech.city       ?? '';
   const location = [city, wilaya].filter(Boolean).join(', ') || '—';
-  const avail    = tech.availability ?? 'Disponible';
 
   /* Avatar */
   let avatarHtml;
@@ -73,8 +68,7 @@ function buildCard(tech, query, index) {
     avatarHtml = `<span>${name.charAt(0).toUpperCase()}</span>`;
   }
 
-  /* Category label — fetch from categories map if available */
-  const categoryLabel = tech.category_name ?? `Cat. ${tech.category_id ?? ''}`;
+ 
 
   const card = document.createElement('a');
   card.className = 'card';
@@ -94,7 +88,6 @@ function buildCard(tech, query, index) {
     <div class="card-body">
       <div class="card-name">${highlight(name, query)}</div>
       <div class="card-meta">
-        <span class="badge-category">${tech.role === "technician" ? escapeHtml(categoryLabel) : "Cliente"}</span>
         <span class="dot"></span>
         <svg style="width:11px;height:11px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24">
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
@@ -102,9 +95,6 @@ function buildCard(tech, query, index) {
         </svg>
         <span>${escapeHtml(location)}</span>
       </div>
-    </div>
-    <div class="card-right">
-      <span class="badge-avail">${escapeHtml(avail)}</span>
     </div>
     <div class="card-arrow">
       <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>

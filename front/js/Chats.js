@@ -76,14 +76,15 @@ function resolveAvatarUrl(imageUrl) {
   }
 
   if (imageUrl.includes('/uploads/avatars')) {
-    return `http://127.0.0.1:5000${imageUrl}`;
+    return `${API_BASE}/${imageUrl}`;
   }
 
-  return `http://127.0.0.1:5000/uploads/avatars/${imageUrl}`;  // 
+  return `${API_BASE}/uploads/avatars/${imageUrl}`;  // 
 }
 
 //Construimos conversacion
 function buildCard(conv) {
+   console.log('other_user_image:', conv.other_user_image); 
   const name        = conv.other_user_name || conv.name || 'Usuario';
   const lastMsg     = conv.last_message    || 'Sin mensajes aún';
   const time        = formatTime(conv.last_message_time || conv.updated_at);
@@ -170,6 +171,7 @@ async function loadConversations() {
       });
 
       data.forEach(conv => {
+        console.log("conversation:", conv);
         listEl.appendChild(buildCard(conv));
       });
 

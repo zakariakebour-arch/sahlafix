@@ -75,9 +75,26 @@
         <textarea id="field-desc" rows="3" placeholder="Cuéntanos sobre ti y tus servicios..."></textarea>
       </div>
 
+      <!-- PHOTO UPLOAD — rediseñado -->
       <div class="config-field">
-        <label for="field-photo">URL de foto de perfil</label>
-        <input type="file" id="field-photo" placeholder="https://...">
+        <label>Foto de perfil</label>
+        <div class="photo-upload-wrapper" id="photo-upload-wrapper">
+          <input type="file" id="field-photo" accept="image/*" hidden>
+          <div class="photo-upload-preview" id="photo-preview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+              <circle cx="12" cy="13" r="3"/>
+              <path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/>
+            </svg>
+          </div>
+          <div class="photo-upload-content">
+            <div class="photo-upload-label" id="photo-label">Subir foto</div>
+            <div class="photo-upload-hint">JPG, PNG — máx. 5 MB</div>
+          </div>
+          <button type="button" class="photo-upload-btn" id="photo-btn" onclick="document.getElementById('field-photo').click()">
+            Elegir
+          </button>
+        </div>
       </div>
     </div>
 
@@ -118,7 +135,6 @@
       <span class="nav-label">Chats</span>
     </a>
   </div>
-
   <script src="../js/Configuracion.js"></script>
 </body>
 </html>

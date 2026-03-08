@@ -109,6 +109,7 @@ def get_conversations(user_id):
             "conversation_id": c["conversation_id"],
             "other_user_id": c["other_user_id"],
             "other_user_name": c["other_user_name"],
+             "other_user_image": c.get("other_user_image"),  # <--- AQUI
             "last_message": c["last_message"],
             "last_message_time": c["last_message_time"].isoformat() if c["last_message_time"] else None
         })

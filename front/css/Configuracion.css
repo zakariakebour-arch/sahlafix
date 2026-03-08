@@ -1,7 +1,12 @@
 /* ═══════════════════════════════════════
    Configuracion.css — SahlaFix
    ═══════════════════════════════════════ */
+*{
+    font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+               'Open Sans', sans-serif;
 
+}
 .config-header-title {
   font-size: 16px;
   font-weight: 800;
@@ -210,4 +215,191 @@
   color: #E03A49;
   border: 1px solid rgba(224,58,73,0.25);
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+/* ─── PHOTO UPLOAD ─── */
+.photo-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  background: var(--bg);
+  transition: border-color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.photo-upload-wrapper:hover {
+  border-color: var(--primary);
+  background: var(--card);
+}
+
+.photo-upload-wrapper.has-photo {
+  border-style: solid;
+  border-color: var(--primary-mid);
+  background: var(--card);
+}
+
+/* Miniatura / icono */
+.photo-upload-preview {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  border: 1.5px solid var(--primary-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: var(--primary);
+}
+
+.photo-upload-preview svg {
+  width: 22px;
+  height: 22px;
+}
+
+.photo-upload-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Texto */
+.photo-upload-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.photo-upload-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.photo-upload-hint {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Botón */
+.photo-upload-btn {
+  height: 34px;
+  padding: 0 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.photo-upload-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}/* ─── PHOTO UPLOAD ─── */
+.photo-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  background: var(--bg);
+  transition: border-color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.photo-upload-wrapper:hover {
+  border-color: var(--primary);
+  background: var(--card);
+}
+
+.photo-upload-wrapper.has-photo {
+  border-style: solid;
+  border-color: var(--primary-mid);
+  background: var(--card);
+}
+
+/* Miniatura / icono */
+.photo-upload-preview {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  border: 1.5px solid var(--primary-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: var(--primary);
+}
+
+.photo-upload-preview svg {
+  width: 22px;
+  height: 22px;
+}
+
+.photo-upload-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Texto */
+.photo-upload-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.photo-upload-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.photo-upload-hint {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Botón */
+.photo-upload-btn {
+  height: 34px;
+  padding: 0 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.photo-upload-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
 }

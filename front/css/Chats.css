@@ -231,4 +231,47 @@
   }
 
   .chat-card:first-child { border-top: none; }
+
+  /* Card más grande en desktop */
+  .chat-card {
+    padding: 20px 28px;
+    gap: 20px;
+  }
+
+  /* Avatar más grande */
+  .chat-avatar {
+    width: 72px;
+    height: 72px;
+    font-size: 26px;
+    border-width: 2.5px;
+  }
+
+  .chat-avatar .unread-dot {
+    width: 15px;
+    height: 15px;
+    bottom: 2px;
+    right: 2px;
+  }
+
+  /* Textos más grandes */
+  .chat-name {
+    font-size: 16px;
+    max-width: 340px;
+  }
+
+  .chat-time {
+    font-size: 12.5px;
+  }
+
+  .chat-preview {
+    font-size: 14px;
+    margin-top: 2px;
+  }
+
+  .unread-badge {
+    min-width: 22px;
+    height: 22px;
+    font-size: 12px;
+    border-radius: 11px;
+  }
 }

@@ -6,7 +6,6 @@ from pydantic import ValidationError
 from sqlalchemy import func
 from app.models.technician import Technician
 
-
 class MessageService:
 
     #Mensaje para enviar mensaje
@@ -101,7 +100,6 @@ class MessageService:
         return new_conversation
 
 
-    #Metodo para obtener las conversaciones del usuario
     @staticmethod
     def get_user_conversations(user_id):
 
@@ -134,34 +132,30 @@ class MessageService:
 
         for conv in conversations:
 
-            # obtener ultimo mensaje
             last_message = Message.query.filter_by(
                 conversation_id=conv.conversation_id
-            ).order_by(
-                Message.created_at.desc()
-            ).first()
+            ).order_by(Message.created_at.desc()).first()
 
-            # obtener el otro participante (no el usuario actual)
             participants = ConversationParticipant.query.filter(
                 ConversationParticipant.conversation_id == conv.conversation_id,
                 ConversationParticipant.user_id != user_id
             ).first()
 
-            # obtener datos del otro usuario
             other_user = User.query.get(participants.user_id) if participants else None
 
-            # obtener foto de perfil del tecnico asociado al otro usuario
-            technician = Technician.query.filter_by(user_id=other_user.id).first() if other_user else None
+            # ── La foto SOLO está en Technician, accedemos via la relación ──
+            other_user_image = None
+            if other_user and other_user.technician:
+                other_user_image = other_user.technician.photo_profile
 
+            
             result.append({
-
                 "conversation_id": conv.conversation_id,
                 "other_user_id": participants.user_id if participants else None,
                 "other_user_name": other_user.full_name if other_user else None,
-                "other_user_image": f"api/v1/uploads/avatars/{technician.photo_profile}" if technician and technician.photo_profile else None,
+                "other_user_image": other_user_image,
                 "last_message": last_message.content if last_message else None,
                 "last_message_time": conv.last_message_time
-
             })
 
         return result
