@@ -1,4 +1,3 @@
-
 const API_BASE = "http://127.0.0.1:5000/api/v1";
 
 const params         = new URLSearchParams(window.location.search);
@@ -23,6 +22,7 @@ async function loadConversationInfo() {
       { headers: { "Authorization": "Bearer " + token } }
     );
     if (!res.ok) return;
+
     const convs = await res.json();
     const conv = convs.find(c => String(c.conversation_id || c.id) === String(conversationId));
     if (!conv) return;
@@ -36,17 +36,33 @@ async function loadConversationInfo() {
 
     // Avatar: foto o inicial
     const avatarEl = document.getElementById('header-avatar');
-    if (imageUrl) {
+
+    // limpiar avatar antes de renderizar
+    avatarEl.innerHTML = "";
+
+    if (imageUrl && imageUrl.trim() !== "") {
+
       const img = document.createElement('img');
-      img.src = imageUrl;
+
+      img.src = `${API_BASE}/uploads/avatars/${imageUrl}`;
+
       img.alt = initial;
+
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
+
       img.onerror = () => {
-        avatarEl.removeChild(img);
+        avatarEl.innerHTML = "";
         avatarEl.textContent = initial;
       };
+
       avatarEl.appendChild(img);
+
     } else {
+
       avatarEl.textContent = initial;
+
     }
 
   } catch (err) {

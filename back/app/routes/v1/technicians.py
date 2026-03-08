@@ -1,8 +1,14 @@
-from flask import Blueprint,request,jsonify,g
+from flask import Blueprint,request,jsonify,g,current_app
 #Importamos technician_service 
 from app.services.technician_service import TechnicianService
 #Importamos JWT
 from app.utils.helpers import jwt_required,roles_required
+
+#IMPORTACIONES NUEVAS PARA SUBIDA DE IMAGEN
+from werkzeug.utils import secure_filename
+import os
+from app.models.technician import Technician
+from app.extensions import db
 
 technicians_bp = Blueprint("technicians_v1",__name__,url_prefix="/api/v1/technicians")
 
@@ -37,16 +43,51 @@ def create_technician():
  
 #Endpoint que recibe foto de perfil
 @technicians_bp.route("/avatar",methods=["POST"])
-@roles_required("technician")
 @jwt_required
+@roles_required("technician")
 def get_photo_profile():
+
     #Recibe un archivo
     file = request.files.get("file")
 
     if not file:
         return jsonify({"error":"Archivo requerido"}),400
-    
-    return jsonify({"message":"Archivo recibido"}),200
+
+    #Limpiamos el nombre del archivo para evitar problemas de seguridad
+    filename = secure_filename(file.filename)
+
+    #Generamos nombre unico usando el id del usuario
+    unique_name = f"{g.current_user.id}_{filename}"
+
+    #Ruta donde se guardara la imagen
+    upload_folder = os.path.join(os.getcwd(), "app", "uploads", "avatars")
+
+    #Creamos la carpeta si no existe
+    os.makedirs(upload_folder, exist_ok=True)
+
+    #Ruta completa del archivo
+    upload_path = os.path.join(upload_folder, unique_name)
+
+    #Guardamos el archivo en el sistema
+    file.save(upload_path)
+
+    #Buscamos el tecnico asociado al usuario logueado
+    technician = Technician.query.filter_by(user_id=g.current_user.id).first()
+
+    #Si no existe tecnico asociado
+    if not technician:
+        return jsonify({"error":"Tecnico no encontrado"}),404
+
+    #Guardamos el nombre del archivo en la base de datos
+    technician.photo_profile = unique_name
+
+    #Guardamos cambios
+    db.session.commit()
+
+    return jsonify({
+        "message":"Foto subida correctamente",
+        "image": unique_name
+    }),200
 
 #Ruta para busqueda de tecnicos con el buscador
 @technicians_bp.route("/search", methods=["GET"])

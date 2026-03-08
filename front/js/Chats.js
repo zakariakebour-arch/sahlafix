@@ -1,5 +1,3 @@
-
-
 const API_BASE = 'http://127.0.0.1:5000/api/v1';
 
 // ── ID del usuario actual (cambiar dinámicamente según login) ──
@@ -9,7 +7,7 @@ async function getOrFetchUserId() {
   const token = localStorage.getItem('token');
   if (!token) return null;
   try {
-    const res = await fetch('http://127.0.0.1:5000/api/v1/auth/me', {
+    const res = await fetch(`${API_BASE}/auth/me`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (!res.ok) return null;
@@ -68,6 +66,22 @@ function getInitials(name) {
   return parts[0][0].toUpperCase();
 }
 
+//Resolver URL de avatar (añadido para que cargue la imagen correctamente)
+function resolveAvatarUrl(imageUrl) {
+
+  if (!imageUrl) return null;
+
+  if (imageUrl.startsWith('http')) {
+    return imageUrl;
+  }
+
+  if (imageUrl.includes('/uploads/avatars')) {
+    return `http://127.0.0.1:5000${imageUrl}`;
+  }
+
+  return `http://127.0.0.1:5000/uploads/avatars/${imageUrl}`;  // 
+}
+
 //Construimos conversacion
 function buildCard(conv) {
   const name        = conv.other_user_name || conv.name || 'Usuario';
@@ -79,8 +93,10 @@ function buildCard(conv) {
 
   const isUnread = unread > 0;
 
-  const avatarInner = imageUrl
-    ? `<img src="${imageUrl}" alt="${getInitials(name)}" onerror="this.style.display='none'">`
+  const avatarSrc = resolveAvatarUrl(imageUrl);
+
+  const avatarInner = avatarSrc
+    ? `<img src="${avatarSrc}" alt="${getInitials(name)}" onerror="this.style.display='none'">`
     : getInitials(name);
 
   const unreadDot   = isUnread ? `<span class="unread-dot"></span>` : '';
@@ -168,7 +184,7 @@ async function loadConversations() {
 // Arrancar
 loadConversations();
 
-categoria_id = document.querySelector("#categorias").value;
+
 
 (function() {
 
@@ -215,9 +231,6 @@ categoria_id = document.querySelector("#categorias").value;
 
     updateThumb();
   }
-
-  roleCliente.addEventListener('click', () => setRole('cliente'));
-  roleTecnico.addEventListener('click', () => setRole('tecnico'));
 
   updateThumb();
 

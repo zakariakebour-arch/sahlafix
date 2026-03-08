@@ -16,3 +16,9 @@ class Config:
         f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
 
+    #Configuracion de fotos
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, "..", "uploads", "avatars")
+
+    MAX_CONTENT_LENGTH = 2 * 1024 * 1024  # Maximo 2MB

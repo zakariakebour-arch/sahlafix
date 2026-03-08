@@ -1,3 +1,4 @@
+const API_BASE = "http://127.0.0.1:5000/api/v1";
 //Creamos el mapa
 const map = L.map('map', { zoomControl:false }).setView([36.72,3.05],6);
 
@@ -45,12 +46,7 @@ if(navigator.geolocation){
     });
 
 }
-
-
-/* ─────────────────────────────
-   CREAR ICONO TÉCNICO
-───────────────────────────── */
-
+//Crear icono
 function createTechIcon(tech){
 
     const name = tech.name || "Técnico";
@@ -61,7 +57,7 @@ function createTechIcon(tech){
     let innerHTML="";
 
     if(photo && photo.trim() !== ""){
-        innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">`
+        innerHTML = `<img src="${API_BASE}/uploads/avatars/${photo}" style="width:100%;height:100%;object-fit:cover;">`;
     }else{
         innerHTML = `
             <span style="
@@ -159,7 +155,7 @@ async function loadTechnicians(){
 
     try{
 
-        const res = await fetch("http://127.0.0.1:5000/api/v1/technicians/");
+        const res = await fetch(`${API_BASE}/technicians/`);
 
         const data = await res.json();
 

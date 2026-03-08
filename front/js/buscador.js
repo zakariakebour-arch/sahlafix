@@ -68,7 +68,7 @@ function buildCard(tech, query, index) {
   /* Avatar */
   let avatarHtml;
   if (tech.image_url && tech.image_url.trim() !== '') {
-    avatarHtml = `<img src="${escapeHtml(tech.image_url)}" alt="${escapeHtml(name)}" loading="lazy">`;
+    avatarHtml = `<img src="${escapeHtml(`${API_BASE}/uploads/avatars/${tech.image_url}`)}" alt="${escapeHtml(name)}" loading="lazy">`;
   } else {
     avatarHtml = `<span>${name.charAt(0).toUpperCase()}</span>`;
   }

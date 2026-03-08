@@ -4,6 +4,7 @@ from datetime import datetime
 from app.schemas.message_schema import MessageCreateSchema
 from pydantic import ValidationError
 from sqlalchemy import func
+from app.models.technician import Technician
 
 
 class MessageService:
@@ -149,11 +150,15 @@ class MessageService:
             # obtener datos del otro usuario
             other_user = User.query.get(participants.user_id) if participants else None
 
+            # obtener foto de perfil del tecnico asociado al otro usuario
+            technician = Technician.query.filter_by(user_id=other_user.id).first() if other_user else None
+
             result.append({
 
                 "conversation_id": conv.conversation_id,
                 "other_user_id": participants.user_id if participants else None,
                 "other_user_name": other_user.full_name if other_user else None,
+                "other_user_image": f"api/v1/uploads/avatars/{technician.photo_profile}" if technician and technician.photo_profile else None,
                 "last_message": last_message.content if last_message else None,
                 "last_message_time": conv.last_message_time
 

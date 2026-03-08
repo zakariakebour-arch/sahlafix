@@ -1,9 +1,10 @@
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
+    const API_BASE = "http://127.0.0.1:5000/api/v1";
 
     async function loadTechnician() {
       try {
-        const res = await fetch(`http://127.0.0.1:5000/api/v1/technicians/${id}`);
+        const res = await fetch(`${API_BASE}/technicians/${id}`);
         if (!res.ok) throw new Error("Error al cargar técnico");
         const tech = await res.json();
 
@@ -11,7 +12,7 @@
         const avatar = document.getElementById("avatar");
         if (tech.image_url && tech.image_url.trim() !== "") {
           const img = document.createElement("img");
-          img.src = tech.image_url;
+          img.src = `${API_BASE}/uploads/avatars/${tech.image_url}`;
           img.alt = tech.name;
           avatar.appendChild(img);
         } else {
@@ -40,8 +41,6 @@
     }
 
 loadTechnician();
-
-const API_BASE = "http://127.0.0.1:5000/api/v1";
 
 const contactBtn = document.getElementById("contact-btn");
 
