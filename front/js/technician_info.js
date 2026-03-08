@@ -55,7 +55,6 @@ contactBtn.addEventListener("click", async () => {
   }
 
   const userId = localStorage.getItem("user_id");
-  console.log(localStorage.getItem('user_id'))
   try {
 
     const res = await fetch(`${API_BASE}/message/conversations`, {

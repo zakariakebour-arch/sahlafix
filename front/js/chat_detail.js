@@ -4,7 +4,7 @@ const params = new URLSearchParams(window.location.search);
 const conversationId = params.get("id");
 
 const token = localStorage.getItem("token");
-const userId = localStorage.getItem("user_id");
+const userId = Number(localStorage.getItem("user_id"));
 
 const chatBox = document.getElementById("chat-messages");
 const sendBtn = document.getElementById("send-btn");
@@ -18,7 +18,7 @@ async function loadMessages() {
 
   try {
 
-    const res = await fetch(`${API_BASE}/message/${conversationId}`, {
+    const res = await fetch(`${API_BASE}/message/conversations/${conversationId}/messages`, {
       headers: {
         "Authorization": "Bearer " + token
       }
@@ -30,14 +30,13 @@ async function loadMessages() {
 
     messages.forEach(msg => {
 
-      // evitar volver a pintar mensajes ya cargados
       if (msg.id <= lastMessageId) return;
 
       const div = document.createElement("div");
 
       div.textContent = msg.content;
 
-      if (msg.sender_id == userId) {
+      if (msg.sender_id === userId) {
         div.style.textAlign = "right";
       } else {
         div.style.textAlign = "left";
@@ -49,7 +48,6 @@ async function loadMessages() {
 
     });
 
-    // bajar al último mensaje
     chatBox.scrollTop = chatBox.scrollHeight;
 
   } catch (err) {
@@ -70,7 +68,7 @@ sendBtn.addEventListener("click", async () => {
 
   try {
 
-    const res = await fetch(`${API_BASE}/message`, {
+    const res = await fetch(`${API_BASE}/message/messages`, {
 
       method: "POST",
 

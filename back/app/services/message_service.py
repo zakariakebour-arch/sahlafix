@@ -61,23 +61,27 @@ class MessageService:
     @staticmethod
     def get_or_create_conversation(user_id, technician_id):
 
-        conversations = Conversation.query.join(
-            ConversationParticipant
-        ).filter(
-            ConversationParticipant.user_id.in_([user_id, technician_id])
-        ).all()
+        existing = (
+            db.session.query(ConversationParticipant.conversation_id)
+            .filter(
+                ConversationParticipant.user_id.in_([user_id, technician_id])
+            )
+            .group_by(
+                ConversationParticipant.conversation_id
+            )
+            .having(
+                func.count(func.distinct(ConversationParticipant.user_id)) == 2
+            )
+            .first()
+        )
 
-        for conv in conversations:
-
-            participants = [p.user_id for p in conv.participants]
-
-            if user_id in participants and technician_id in participants:
-                return conv
+        if existing:
+            return Conversation.query.get(existing.conversation_id)
 
         new_conversation = Conversation()
 
         db.session.add(new_conversation)
-        db.session.commit()
+        db.session.flush()
 
         participant1 = ConversationParticipant(
             conversation_id=new_conversation.id,
