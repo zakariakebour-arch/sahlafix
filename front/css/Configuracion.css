@@ -1,0 +1,213 @@
+/* ═══════════════════════════════════════
+   Configuracion.css — SahlaFix
+   ═══════════════════════════════════════ */
+
+.config-header-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  margin-left: 4px;
+}
+
+.container {
+  min-height: calc(100vh - 60px - var(--nav-h));
+  padding-top: 24px;
+}
+
+/* ─── AVATAR SECTION ─── */
+.config-avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card);
+  border: 1.5px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.config-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-mid));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 3px solid var(--primary-mid);
+}
+
+.config-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.config-avatar-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.config-avatar-role {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-light);
+  border: 1px solid var(--primary-mid);
+  padding: 2px 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+/* ─── CARD FORMULARIO ─── */
+.config-card {
+  background: var(--card);
+  border: 1.5px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.config-card-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+}
+
+/* ─── CAMPOS ─── */
+.config-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.config-field:last-child { margin-bottom: 0; }
+
+.config-field label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-soft);
+  letter-spacing: 0.2px;
+}
+
+.config-field input,
+.config-field select,
+.config-field textarea {
+  height: 46px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 14px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.config-field textarea {
+  height: auto;
+  padding: 12px 14px;
+  resize: none;
+  line-height: 1.6;
+}
+
+.config-field select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238FA3AC' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.config-field input:focus,
+.config-field select:focus,
+.config-field textarea:focus {
+  border-color: var(--primary);
+  background: var(--card);
+  box-shadow: 0 0 0 3px rgba(14,165,165,0.1);
+}
+
+.config-field input::placeholder,
+.config-field textarea::placeholder { color: var(--muted); }
+
+/* ─── BOTÓN GUARDAR ─── */
+.config-btn-wrap {
+  margin-bottom: 24px;
+}
+
+.config-btn {
+  width: 100%;
+  height: 52px;
+  background: var(--text);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 800;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  letter-spacing: 0.3px;
+}
+
+.config-btn:hover  { background: var(--primary-dark); }
+.config-btn:active { transform: scale(0.98); }
+
+.config-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ─── TOAST ─── */
+.config-toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+.config-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.config-toast.success {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 16px rgba(14,165,165,0.35);
+}
+
+.config-toast.error {
+  background: white;
+  color: #E03A49;
+  border: 1px solid rgba(224,58,73,0.25);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}

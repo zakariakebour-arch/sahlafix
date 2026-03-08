@@ -164,3 +164,109 @@
     console.error("Error:", error);
   }
 })();
+(async () => {
+  const cardsContainer = document.querySelector('.cards');
+  let allTechnicians = [];
+
+  async function fetchTechnicians() {
+    const res = await fetch('http://127.0.0.1:5000/api/v1/technicians/', { method: "GET" });
+    if (!res.ok) throw new Error("Error al cargar técnicos");
+    return await res.json();
+  }
+
+  function renderTechnicians(technicians) {
+    cardsContainer.innerHTML = "";
+    technicians.forEach(tech => {
+      const card = document.createElement('a');
+      card.className = 'card';
+      card.href = `technician_info.html?id=${tech.id}`;
+
+      const avatar = document.createElement('div');
+      avatar.className = 'avatar';
+      avatar.textContent = tech.name.charAt(0).toUpperCase();
+
+      const body = document.createElement('div');
+      body.className = 'card-body';
+
+      const name = document.createElement('div');
+      name.className = 'card-name';
+      name.textContent = tech.name;
+
+      const meta = document.createElement('div');
+      meta.className = 'card-meta';
+
+      const dot1 = document.createElement('span');
+      dot1.className = 'dot';
+
+      const category = document.createElement('span');
+      category.textContent = tech.category_name;
+
+      const dot2 = document.createElement('span');
+      dot2.className = 'dot';
+
+      const description = document.createElement('div');
+      description.className = 'card-description';
+      description.textContent = tech.description;
+
+      meta.appendChild(dot1);
+      meta.appendChild(category);
+      meta.appendChild(dot2);
+
+      body.appendChild(name);
+      body.appendChild(meta);
+      body.appendChild(description);
+
+      card.appendChild(avatar);
+      card.appendChild(body);
+
+      cardsContainer.appendChild(card);
+    });
+  }
+
+  function filterAndRender(categoryId) {
+    if (!categoryId) {
+      renderTechnicians(allTechnicians);
+    } else {
+      const filtered = allTechnicians.filter(t => String(t.category_id) === String(categoryId));
+      renderTechnicians(filtered);
+    }
+  }
+
+  try {
+    allTechnicians = await fetchTechnicians();
+    renderTechnicians(allTechnicians);
+
+    const selectCategorias = document.querySelector('.filter-grid .select-wrap select');
+    const quickFilters = document.querySelector('.quick-filters');
+
+    selectCategorias.addEventListener('change', () => {
+      filterAndRender(selectCategorias.value);
+      quickFilters.querySelectorAll('.pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.categoryId === selectCategorias.value);
+      });
+    });
+
+    quickFilters.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!target.classList.contains('pill')) return;
+      filterAndRender(target.dataset.categoryId);
+    });
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+})();
+function filterAndRender(categoryId, wilaya) {
+    let filtered = allTechnicians;
+
+    if (categoryId) {
+      filtered = filtered.filter(t => String(t.category_id) === String(categoryId));
+    }
+
+    if (wilaya) {
+      filtered = filtered.filter(t => t.wilaya === wilaya);
+    }
+
+    renderTechnicians(filtered);
+}
+filterAndRender();

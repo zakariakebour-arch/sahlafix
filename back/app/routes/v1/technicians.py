@@ -1,4 +1,4 @@
-from flask import Blueprint,request,jsonify
+from flask import Blueprint,request,jsonify,g
 #Importamos technician_service 
 from app.services.technician_service import TechnicianService
 #Importamos JWT
@@ -78,3 +78,34 @@ def location(technician_id):
 
     #Retornamos mensaje de resultado
     return jsonify(data),status
+
+#Metodo para cargar la informacion actual del tecnico antes de modifcar
+@technicians_bp.route("/me", methods=["GET"])
+@jwt_required
+@roles_required("technician")
+def get_my_profile():
+
+    user_id = g.current_user.id
+
+    # Llamamos al service
+    data, status = TechnicianService.get_by_user_id(user_id)
+
+    return jsonify(data), status
+
+#Endpoint para que el tecnico actualice sus datos
+@technicians_bp.route("/me", methods=["PUT"])
+@jwt_required
+@roles_required("technician")
+def update_technician():
+
+    #Datos enviados en JSON
+    data = request.get_json()
+
+    #Usuario del token
+    user_id =  g.current_user.id
+
+    #Llamamos al service
+    data, status = TechnicianService.update_technician(data, user_id)
+
+    #Retornamos respuesta
+    return jsonify(data), status

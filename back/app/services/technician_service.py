@@ -195,3 +195,63 @@ class TechnicianService:
             db.session.rollback()
 
             return {"error":"Error interno al actualizar ubicacion"},500
+        
+    #Metodo que se encarga de devoler los datos para cargar en el formulario de modificacion
+    @staticmethod
+    def get_by_user_id(user_id: int):
+
+        technician = Technician.query.filter_by(user_id=user_id).first()
+        if not technician:
+            return {"error": "Técnico no encontrado"}, 404
+
+        return {
+            "full_name": technician.full_name,
+            "phone": technician.phone,
+            "city": technician.city,
+            "wilaya": technician.wilaya,
+            "description": technician.description,
+            "photo_profile": technician.photo_profile
+        }, 200
+    
+    @staticmethod
+    def update_technician(data: dict, user_id: int):
+
+        technician = Technician.query.filter_by(user_id=user_id).first()
+        if not technician:
+            return {"error": "Tecnico no encontrado"}, 404
+
+        # También buscamos el usuario para sincronizar
+        user = User.query.get(user_id)
+
+        try:
+            if "description" in data:
+                technician.description = data["description"]
+
+            if "full_name" in data:
+                technician.full_name = data["full_name"]
+                if user:
+                    user.full_name = data["full_name"]  # sincronizar
+
+            if "phone" in data:
+                technician.phone = data["phone"]
+                if user:
+                    user.phone = data["phone"]  # sincronizar
+
+            if "city" in data:
+                technician.city = data["city"]
+
+            if "wilaya" in data:
+                technician.wilaya = data["wilaya"]
+
+            if "category_id" in data:
+                technician.category_id = data["category_id"]
+
+            if "photo" in data:
+                technician.photo_profile = data["photo"]
+
+            db.session.commit()
+            return technician.to_dict(), 200
+
+        except Exception:
+            db.session.rollback()
+            return {"error": "Error actualizando tecnico"}, 500

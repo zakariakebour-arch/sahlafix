@@ -107,3 +107,47 @@ class UserRegister:
         "role": user.role
       }
     }, 200
+
+  #Metodo para actualizar perfil de usuario
+  @staticmethod
+  def update_user(data: dict, user_id: int):
+
+      #Buscamos el usuario
+      user = User.query.get(user_id)
+
+      if not user:
+          return {"error": "Usuario no encontrado"}, 404
+
+      try:
+          #Actualizar nombre
+          if "full_name" in data:
+              user.full_name = data["full_name"]
+
+          #Actualizar email
+          if "email" in data:
+              email = data["email"].strip().lower()
+
+              #Comprobar si el email ya existe
+              existing_user = User.query.filter_by(email=email).first()
+
+              if existing_user and existing_user.id != user.id:
+                  return {"error": "Email ya registrado"}, 409
+
+              user.email = email
+
+          #Guardar cambios
+          db.session.commit()
+
+          return {
+              "message": "Perfil actualizado",
+              "user": {
+                  "id": user.id,
+                  "full_name": user.full_name,
+                  "email": user.email,
+                  "role": user.role
+              }
+          }, 200
+
+      except Exception:
+          db.session.rollback()
+          return {"error": "Error actualizando usuario"}, 500

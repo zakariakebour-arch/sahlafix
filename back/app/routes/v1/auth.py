@@ -124,3 +124,19 @@ def me():
     return jsonify({
         "user": {"id": u.id, "email": u.email,"full_name":u.full_name, "role": u.role}
     }), 200
+
+#Ruta para actualizar perfil del usuario
+@auth_bp.route("/me", methods=["PUT"])
+@jwt_required
+def update_me():
+
+    #usuario actual del token
+    user = g.current_user
+
+    #datos enviados
+    data = request.get_json()
+
+    #llamamos al servicio
+    response, status = UserRegister.update_user(data, user.id)
+
+    return jsonify(response), status

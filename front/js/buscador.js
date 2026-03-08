@@ -1,10 +1,5 @@
-/* ═══════════════════════════════════════════════
-   search.js — SahlaFix Búsqueda de técnicos
-   ═══════════════════════════════════════════════ */
-
 const API_BASE = 'http://127.0.0.1:5000/api/v1';
 
-/* ── DOM refs ── */
 const searchInput   = document.getElementById('search-input');
 const globalSearch  = document.getElementById('global-search');
 const searchBtn     = document.getElementById('search-btn');
@@ -59,14 +54,10 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
-
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
-
-/* ══════════════════════════════════════
-   BUILD CARD
-   ══════════════════════════════════════ */
+//Creamos card
 function buildCard(tech, query, index) {
   const name     = tech.full_name  ?? '—';
   const wilaya   = tech.wilaya     ?? '';
@@ -94,7 +85,7 @@ function buildCard(tech, query, index) {
   /* Si es técnico va a su ficha, si es cliente a perfil */
   card.href = isTechnician
     ? `technician_info.html?id=${tech.technician_id}`
-    : `profile.html?id=${tech.user_id}`;
+    : `technician_info.html?id=${tech.user_id}`;
 
   card.style.animationDelay = `${index * 60}ms`;
 
@@ -122,10 +113,7 @@ function buildCard(tech, query, index) {
 
   return card;
 }
-
-/* ══════════════════════════════════════
-   RENDER RESULTS
-   ══════════════════════════════════════ */
+//Renderizar resultados
 function renderResults(technicians, query) {
   if (!technicians || technicians.length === 0) {
     showState('empty');

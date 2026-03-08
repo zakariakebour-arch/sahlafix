@@ -1,32 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Chat</title>
-<link rel="stylesheet" href="../css/chat_detail.css">
+  <meta charset="UTF-8">
+  <title>Chat — SahlaFix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/Home.css">
+  <link rel="icon" type="image/png" href="../assests/logo.png">
+  <link rel="stylesheet" href="../css/chat_detail.css">
 </head>
-
 <body>
 
-<h2>Chat</h2>
-
-<div id="chat-messages"></div>
-
-<div id="chat-input">
-
-    <input 
-        type="text" 
-        id="message-input" 
-        placeholder="Escribe un mensaje..."
-    >
-
-    <button id="send-btn">
-        Enviar
+  <!-- header -->
+  <header class="chat-header">
+    <button class="chat-back-btn" onclick="history.back()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
     </button>
+    <div class="chat-header-avatar" id="header-avatar"></div>
+    <div class="chat-header-info">
+      <div class="chat-header-name" id="header-name">Cargando...</div>
+    </div>
+  </header>
 
-</div>
+  <!-- Contenedor de mensajes -->
+  <div id="chat-messages"></div>
 
-<script src="../js/chat_detail.js"></script>
+  <!-- input -->
+  <div id="chat-input">
+    <input
+      type="text"
+      id="message-input"
+      placeholder="Escribe un mensaje…"
+      autocomplete="off"
+      spellcheck="false"
+    >
+    <button id="send-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
 
+  <script src="../js/chat_detail.js"></script>
 </body>
 </html>
