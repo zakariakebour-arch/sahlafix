@@ -291,18 +291,3 @@ function resolveAvatarUrl(imageUrl) {
   }
 })();
 
-
-function filterAndRender(categoryId, wilaya) {
-    let filtered = allTechnicians;
-
-    if (categoryId) {
-      filtered = filtered.filter(t => String(t.category_id) === String(categoryId));
-    }
-
-    if (wilaya) {
-      filtered = filtered.filter(t => t.wilaya === wilaya);
-    }
-
-    renderTechnicians(filtered);
-}
-filterAndRender();

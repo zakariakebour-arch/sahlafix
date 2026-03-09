@@ -59,8 +59,8 @@ class MessageService:
 
     # Crear u obtener conversación
     @staticmethod
-    def get_or_create_conversation(user_id, technician_id):
-
+    def get_or_create_conversation(user_id, technician_id,technician):
+        
         existing = (
             db.session.query(ConversationParticipant.conversation_id)
             .filter(
@@ -78,6 +78,7 @@ class MessageService:
         if existing:
             return Conversation.query.get(existing.conversation_id)
 
+        
         new_conversation = Conversation()
 
         db.session.add(new_conversation)

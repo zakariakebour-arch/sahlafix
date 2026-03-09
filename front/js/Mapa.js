@@ -18,8 +18,6 @@ if(navigator.geolocation){
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
 
-        console.log("Mi ubicación:",lat,lng);
-
         map.setView([lat,lng],14);
 
         const myIcon = L.divIcon({
@@ -40,7 +38,28 @@ if(navigator.geolocation){
 
         L.marker([lat,lng],{icon:myIcon})
         .addTo(map)
-        .bindPopup("<b>Tu ubicación</b>")
+        .bindPopup(`
+    <div style="
+        padding: 10px 14px;
+        font-family: 'DM Sans', sans-serif;
+        text-align: center;
+    ">
+        <div style="
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #0EA5A5;
+            margin: 0 auto 8px;
+            box-shadow: 0 0 0 4px rgba(14,165,165,.2);
+        "></div>
+        <span style="
+            font-size: 13px;
+            font-weight: 700;
+            color: #0A2E3A;
+            letter-spacing: 0.2px;
+        ">Tu ubicación</span>
+    </div>
+`)
         .openPopup();
 
     });

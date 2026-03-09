@@ -73,27 +73,29 @@ def mark_as_read(message_id):
 def get_conversation():
 
     data = request.json
-
     user_id = data.get("user_id")
     technician_id = data.get("technician_id")
 
-    # Buscamos el tecnico en la tabla technicians
     technician = Technician.query.get(technician_id)
-
     if not technician:
         return jsonify({"error": "Tecnico no encontrado"}), 404
 
-    # Convertimos el technician_id al user_id real del tecnico
     technician_user_id = technician.user_id
 
-    conversation = MessageService.get_or_create_conversation(
+    # Evitar que el usuario se contacte a si mismo
+    if str(user_id) == str(technician_user_id):
+        return jsonify({"error": "No puedes contactarte a ti mismo"}), 403
+
+    result = MessageService.get_or_create_conversation(
         user_id,
-        technician_user_id
+        technician_user_id,
+        technician
     )
 
-    return jsonify({
-        "conversation_id": conversation.id
-    }), 200
+    if isinstance(result, tuple):
+        return jsonify(result[0]), result[1]
+
+    return jsonify({"conversation_id": result.id}), 200
 
 
 # Ruta para obtener conversaciones de un usuario
@@ -109,7 +111,7 @@ def get_conversations(user_id):
             "conversation_id": c["conversation_id"],
             "other_user_id": c["other_user_id"],
             "other_user_name": c["other_user_name"],
-             "other_user_image": c.get("other_user_image"),  # <--- AQUI
+             "other_user_image": c.get("other_user_image"),
             "last_message": c["last_message"],
             "last_message_time": c["last_message_time"].isoformat() if c["last_message_time"] else None
         })
@@ -131,3 +133,4 @@ def get_conversation_by_id(conversation_id):
         "conversation_id": conversation.id,
         "created_at": conversation.created_at.isoformat()
     }), 200
+

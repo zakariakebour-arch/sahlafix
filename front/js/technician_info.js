@@ -1,4 +1,4 @@
-    const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
     const API_BASE = "http://127.0.0.1:5000/api/v1";
 
@@ -42,6 +42,37 @@
 
 loadTechnician();
 
+function showToast(message, type = "error") {
+  const existing = document.getElementById("toast-msg");
+  if (existing) existing.remove();
+
+  const toast = document.createElement("div");
+  toast.id = "toast-msg";
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${type === "error" ? "#ff4d4f" : "#52c41a"};
+    color: white;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  `;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.style.opacity = "1");
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
 const contactBtn = document.getElementById("contact-btn");
 
 contactBtn.addEventListener("click", async () => {
@@ -49,7 +80,7 @@ contactBtn.addEventListener("click", async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    alert("Debes iniciar sesión");
+    showToast("Debes iniciar sesión para contactar");
     return;
   }
 
@@ -72,6 +103,12 @@ contactBtn.addEventListener("click", async () => {
 
     });
 
+    if (res.status === 403) {
+      const data = await res.json();
+      showToast(data.error || "Este técnico no está disponible para ser contactado");
+      return;
+    }
+
     if (!res.ok) {
       throw new Error("Error creando conversación");
     }
@@ -85,7 +122,7 @@ contactBtn.addEventListener("click", async () => {
   } catch (err) {
 
     console.error(err);
-    alert("No se pudo iniciar el chat");
+    showToast("No se pudo iniciar el chat");
 
   }
 

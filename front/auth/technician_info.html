@@ -106,5 +106,24 @@
   <script src="../js/technician_info.js"> 
   </script>
 
+  <script>
+    /* ─── RIPPLE EN BOTÓN CONTACTAR ─── */
+    document.getElementById("contact-btn").addEventListener("mousedown", function(e) {
+      const btn = this;
+      const circle = document.createElement("span");
+      const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+      const radius = diameter / 2;
+      const rect = btn.getBoundingClientRect();
+      circle.style.cssText = `
+        width: ${diameter}px; height: ${diameter}px;
+        left: ${e.clientX - rect.left - radius}px;
+        top: ${e.clientY - rect.top - radius}px;
+      `;
+      circle.classList.add("ripple");
+      btn.querySelector(".ripple")?.remove();
+      btn.appendChild(circle);
+    });
+  </script>
+
 </body>
 </html>
