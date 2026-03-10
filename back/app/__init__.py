@@ -3,7 +3,6 @@ from flask_cors import CORS
 from app.extensions import db
 from app.routes.v1 import register_v1_routes
 from app.config import Config
-# Importamos los modelos para que SQLAlchemy los detecte
 from app import models
 
 def create_app():

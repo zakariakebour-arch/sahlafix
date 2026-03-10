@@ -59,9 +59,6 @@ class Technician(db.Model):
     #Para guardar la ubicacion reciente
     last_location_update = db.Column(db.DateTime, nullable=True)
 
-    
-    available = db.Column(db.Boolean, default=True, nullable=False)
-
     #Creamos un metodo que retorna un diccionario con la información asociada al tecnico
     def to_dict(self):
         return {
