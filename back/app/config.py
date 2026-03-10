@@ -1,24 +1,26 @@
 import os
+from dotenv import load_dotenv
 
-#Clase para configurar la conexion a la base de datos completa
+# Cargar variables del archivo .env
+load_dotenv()
+
 class Config:
-    #Clave secreta JWT
-    SECRET_KEY = "mi_clave_ultra_segura_para_jwt_123456"
-    # Configuración de SQLAlchemy para MySQL
-    DB_USER = os.environ.get("DB_USER")          # usuario MySQL
-    DB_PASSWORD = os.environ.get("DB_PASSWORD")      # Contraseña MySQL
-    DB_HOST = os.environ.get("DB_HOST")     # servidor MySQL
-    DB_PORT = os.environ.get("DB_PORT")            # puerto MySQL
-    DB_NAME = os.environ.get("DB_NAME")      # nombre de la base de datos
+    # Clave secreta
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
-    #URL dinamica segun los datos
+    # Configuración MySQL
+    DB_USER = os.getenv("DB_USER")
+    DB_PASSWORD = os.getenv("DB_PASSWORD")
+    DB_HOST = os.getenv("DB_HOST")
+    DB_PORT = os.getenv("DB_PORT")
+    DB_NAME = os.getenv("DB_NAME")
+    
     SQLALCHEMY_DATABASE_URI = (
         f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
 
-    #Configuracion de fotos
+    # Configuracion de fotos
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "..", "uploads", "avatars")
 
-    MAX_CONTENT_LENGTH = 2 * 1024 * 1024  # Maximo 2MB
+    MAX_CONTENT_LENGTH = 2 * 1024 * 1024

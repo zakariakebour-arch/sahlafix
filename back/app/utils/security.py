@@ -12,7 +12,7 @@ def _utcnow():
 
 def generate_token(user):
     """Genera un access token con claims mínimos y expiración."""
-    exp_hours = current_app.config.get("JWT_EXPIRATION_HOURS", 24)
+    exp_hours = current_app.config.get("JWT_EXPIRATION_HOURS", 48)
     now = _utcnow()
     payload = {
         "user_id": user.id,           # si prefieres estándar, usa "sub": str(user.id)
