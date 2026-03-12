@@ -1,7 +1,8 @@
 from app import create_app
 from flask import send_from_directory
+from dotenv import load_dotenv
 import os
-
+load_dotenv()
 app = create_app()
 
 # Ruta absoluta a la carpeta de avatars
