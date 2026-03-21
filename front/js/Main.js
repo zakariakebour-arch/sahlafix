@@ -1,4 +1,3 @@
-
 const track  = document.getElementById('categorias');
 const slides = document.querySelectorAll('.categorias');
 const total  = slides.length;
@@ -23,11 +22,13 @@ setInterval(() => {
     updateDots(current);
 }, 2500);
 
+// Animación imágenes servicios
 const images = document.querySelectorAll('#servicios-fotos img');
 
 const imgObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
+    entries.forEach((entry) => {
         if (entry.isIntersecting) {
+            const index = Array.from(images).indexOf(entry.target); // ← índice real
             setTimeout(() => {
                 entry.target.classList.add('visible');
             }, index * 300);
@@ -37,9 +38,13 @@ const imgObserver = new IntersectionObserver((entries) => {
 
 images.forEach(img => imgObserver.observe(img));
 
+// ✅ Declarar steps ANTES de usarlo
+const steps = document.querySelectorAll('.step');
+
 const stepsObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
+    entries.forEach((entry) => {
         if (entry.isIntersecting) {
+            const index = Array.from(steps).indexOf(entry.target); // ← índice real
             setTimeout(() => {
                 entry.target.classList.add('visible');
             }, index * 200);
@@ -48,8 +53,12 @@ const stepsObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 
 steps.forEach(step => stepsObserver.observe(step));
+
+// Año footer
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+// Menú hamburguesa
 const menuToggle = document.getElementById('menu-toggle');
 const navLinks   = document.getElementById('nav-links');
 

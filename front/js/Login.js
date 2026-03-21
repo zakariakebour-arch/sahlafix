@@ -46,15 +46,15 @@ function showToast(message, type = "error") {
   const token = localStorage.getItem('token');
   if (token) {
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/v1/auth/me', {
+      const res = await fetch('http://sahlafix.es/api/v1/auth/me', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
         const me = await res.json();
         localStorage.setItem('user_id', me.user.id);
-        localStorage.setItem('email', me.user.email); // opcional, útil
+        localStorage.setItem('email', me.user.email); // opcional, Ãºtil
         localStorage.setItem('role', me.user.role);   // opcional
-        window.location.href = 'file:///C:/Users/Usuario/Desktop/sahlafix/front/auth/Home.html';
+        window.location.href = 'http://sahlafix.es/front/auth/Home.html';
         return;
       } else {
         localStorage.removeItem('token');
@@ -68,12 +68,12 @@ function showToast(message, type = "error") {
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  //Seleccionamos los inputs de correo y contraseña
+  //Seleccionamos los inputs de correo y contraseÃ±a
   const email = document.querySelector("#email").value;
   const password = document.querySelector("#password").value;
 
   //Hacemos un fetch al backend
-  const resp = await fetch('http://127.0.0.1:5000/api/v1/auth/login',{
+  const resp = await fetch('http://sahlafix.es/api/v1/auth/login',{
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({email,password})
@@ -87,20 +87,21 @@ form.addEventListener('submit', async (e) => {
       localStorage.setItem("user_id",userID)
       localStorage.setItem('token', token);
       // Validar inmediatamente con /me y redirigir
-      const resMe = await fetch('http://127.0.0.1:5000/api/v1/auth/me', {
+      const resMe = await fetch('http://sahlafix.es/api/v1/auth/me', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (resMe.ok) {
-        showToast("Inicio de sesión correcto", "success");
+        showToast("Inicio de sesiÃ³n correcto", "success");
         setTimeout(() => {
-          window.location.href = 'file:///C:/Users/Usuario/Desktop/sahlafix/front/auth/Home.html';
+          window.location.href = 'http://sahlafix.es
+/front/auth/Home.html';
         }, 1000);
       } else {
         localStorage.removeItem('token');
         localStorage.removeItem('user_id');
-        showToast("Token inválido. Inicia sesión de nuevo.");
+        showToast("Token invÃ¡lido. Inicia sesiÃ³n de nuevo.");
       }
   }else{
-      showToast("Inicio de sesión incorrecto. Verifica tus credenciales.");
+      showToast("Inicio de sesiÃ³n incorrecto. Verifica tus credenciales.");
   }
 });
