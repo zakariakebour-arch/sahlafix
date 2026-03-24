@@ -6,8 +6,6 @@ Enfocada inicialmente en el público argelino.
 
 Demo: https://sahlafix.es
 
-Repo: https://lnkd.in/ewKK7izN
-
 Problema que resuelve
 
 Encontrar un técnico fiable cerca de ti suele ser un proceso lento e ineficiente:
